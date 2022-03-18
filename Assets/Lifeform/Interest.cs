@@ -4,34 +4,38 @@ using UnityEngine;
 
 public enum Intent 
 {
-  Idle,
-  Wander,
-  Eat,
-  Sleep
+    Idle,
+    Wander,
+    Eat,
+    Sleep
 }
 
 public class Interest 
 {
-    public Vector3 Point;
-    public GameObject Object;
-    public Intent Intent;
-    public float Dedication;
+    [SerializeField]
+    private Intent m_Intent;
+    [SerializeField]
+    private Vector3 m_Point;
+    [SerializeField]
+    private GameObject m_Object;
+    
+    public Intent Intent => m_Intent;
+    public Vector3 Point => m_Point;
 
-    public static Interest Wander(Vector3 point) 
+    public Interest(Intent intent)
     {
-        return new Interest 
-        {
-            Point = point,
-            Intent = Intent.Wander,
-            Dedication = 10.0f,
-        };
+        m_Intent = intent;
     }
 
-    public static Interest Idle() {
-        return new Interest 
-        {
-            Intent = Intent.Idle,
-            Dedication = 1.0f,
-        };
+    public Interest(Intent intent, Vector3 point)
+      : this(intent)
+    {
+        m_Point = point;
+    }
+
+    public Interest(Intent intent, GameObject obj)
+      : this(intent)
+    {
+        m_Object = obj;
     }
 }

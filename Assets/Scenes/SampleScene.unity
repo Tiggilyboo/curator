@@ -130,6 +130,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4134832530007415585, guid: 33151ebcfc95355e0926611a8f7c783d, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5051467436911677844, guid: 33151ebcfc95355e0926611a8f7c783d, type: 3}
+      propertyPath: m_Walkable.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6341172289964428212, guid: 33151ebcfc95355e0926611a8f7c783d, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -185,6 +193,10 @@ PrefabInstance:
     - target: {fileID: 8225920362799986264, guid: 33151ebcfc95355e0926611a8f7c783d, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8997506443063793376, guid: 33151ebcfc95355e0926611a8f7c783d, type: 3}
+      propertyPath: m_Moving
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}

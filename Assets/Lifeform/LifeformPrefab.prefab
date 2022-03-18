@@ -105,7 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6341172289964428212}
   - component: {fileID: 8997506443063793376}
-  - component: {fileID: 8173372932859360352}
+  - component: {fileID: 5051467436911677844}
   m_Layer: 0
   m_Name: LifeformPrefab
   m_TagString: Player
@@ -140,17 +140,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c05ee458c0525a74aa7c1922901ac213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Moving: 0
-  Eating: 0
-  Sleeping: 0
-  Hunger: 0
-  Age: 0
-  Energy: 0
-  Eyesight: 10
-  MaxHunger: 0
-  MaxAge: 0
-  MaxEnergy: 0
---- !u!114 &8173372932859360352
+  m_Moving: 0
+  m_Eating: 0
+  m_Sleeping: 0
+  m_Hunger: 10
+  m_Age: 0
+  m_Energy: 10
+--- !u!114 &5051467436911677844
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,6 +155,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8225920362799986264}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1497322f874230d2ea213d114708117b, type: 3}
+  m_Script: {fileID: 11500000, guid: 911596f655f16f560a49602e774e1618, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Walkable:
+    serializedVersion: 2
+    m_Bits: 8
+  m_Lifeform: {fileID: 8997506443063793376}
+  m_Dedication: 10
