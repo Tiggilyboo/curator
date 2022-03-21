@@ -85,25 +85,6 @@ public class Lifeform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(m_Sleeping) 
-        {
-            m_Energy += GetSleepRate(); 
-            if(m_Energy > m_MaxEnergy) 
-            {
-              m_Energy = m_MaxEnergy;
-              m_Sleeping = false;
-            }
-        } 
-        else 
-        {
-            m_Energy -= GetMoveRate();
-        }
-
-        if(!m_Eating)
-        {
-            m_Hunger -= GetHungerRate();
-        }
-
         m_Age += GetAgeRate();
     }
 }

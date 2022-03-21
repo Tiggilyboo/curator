@@ -105,7 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6341172289964428212}
   - component: {fileID: 8997506443063793376}
-  - component: {fileID: 5051467436911677844}
+  - component: {fileID: 2542990782341606854}
   m_Layer: 0
   m_Name: LifeformPrefab
   m_TagString: Player
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Hunger: 10
   m_Age: 0
   m_Energy: 10
---- !u!114 &5051467436911677844
+--- !u!114 &2542990782341606854
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,8 +158,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 911596f655f16f560a49602e774e1618, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Walkable:
-    serializedVersion: 2
-    m_Bits: 8
-  m_Lifeform: {fileID: 8997506443063793376}
-  m_Dedication: 10
+  m_CurrentState: {fileID: 11400000, guid: f9fe0e1b544e3a47baaf565baaca6e90, type: 2}
+  m_Component: {fileID: 8997506443063793376}
+  m_Transitions:
+  - m_PositiveState: {fileID: 0}
+    m_NegativeState: {fileID: 0}
+    m_Condition: {fileID: 0}
