@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Lifeform : MonoBehaviour
 {
+    // TODO: I feel like these could be bitwise flagged in an enum?
+    //  Or, do we check the state machine state instead?
     [SerializeField]
     private bool m_Moving;
     [SerializeField]
@@ -18,7 +20,7 @@ public class Lifeform : MonoBehaviour
     private float m_Energy;
     
     // To later be derived from genetics
-    private float m_Eyesight = 5.0f;
+    private float m_Eyesight = 8.0f;
     private float m_MaxHunger = 10.0f;
     private float m_MaxAge = 100.0f;
     private float m_MaxEnergy = 10.0f;

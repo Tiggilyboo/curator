@@ -8,7 +8,6 @@ public abstract class StateMachine<TComponent>: MonoBehaviour
 {
     [SerializeField]
     private TComponent m_Component;
-
     [SerializeField]
     private State<TComponent> m_CurrentState;
 

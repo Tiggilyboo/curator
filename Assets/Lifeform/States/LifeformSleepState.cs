@@ -5,7 +5,7 @@ using UnityEngine;
 public class LifeformSleepState: State<Lifeform>
 {   
     [SerializeField]
-    private float m_SleepThresholdInSec = 10.0f;
+    private float m_SleepThresholdInSec = 5.0f;
 
     private bool DoesLifeformRequireSleep(Lifeform lf) 
     {
@@ -27,6 +27,7 @@ public class LifeformSleepState: State<Lifeform>
           return true;
 
         bool notSleepingAndLacksEnergy = (!lf.Sleeping && DoesLifeformRequireSleep(lf));
+
         Debug.Log(string.Format("c1: {0}, c2: {1}", notSleepingAndLacksEnergy, sleepingAndNotFullySlept));
 
         return notSleepingAndLacksEnergy;

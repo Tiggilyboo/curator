@@ -8,12 +8,10 @@ using Random = UnityEngine.Random;
 public class LifeformWanderState: State<Lifeform>
 {
     [SerializeField]
-    private float m_MinWaypointRadius = 2.0f;
-
+    private float m_MinWaypointRadius = 3.0f;
     [SerializeField]
     private LayerMask m_Walkable;
 
-    // TODO: NavMesh
     private Nullable<Vector3> m_Destination = null;
 
     private bool HasDestination() 
@@ -24,13 +22,19 @@ public class LifeformWanderState: State<Lifeform>
     private bool HasReachedDestination(Lifeform lf) 
     {
         return m_Destination.HasValue
-          && Vector3.Distance(lf.GetPosition(), m_Destination.Value) < m_MinWaypointRadius;
+            && Vector3.Distance(lf.GetPosition(), m_Destination.Value) < m_MinWaypointRadius;
     }
 
     private Nullable<Vector3> GetRandomWalkablePointInRange(Lifeform lf, float range)
     {
-        Vector3 radius = Random.insideUnitCircle * range;
-        if(Physics.Raycast(lf.GetPosition() + radius + Vector3.up, Vector3.down, out RaycastHit hit, range, m_Walkable))
+        Vector3 randomWithinRadius = new Vector3(
+            range * (-1.0f + Random.value * 2.0f),
+            1.0f, // Something above the main walkable object
+            range * (-1.0f + Random.value * 2.0f));
+
+        Vector3 rayOrigin = lf.GetPosition() + randomWithinRadius;
+        
+        if(Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, range, m_Walkable))
         {
            return hit.point;
         }
@@ -52,8 +56,7 @@ public class LifeformWanderState: State<Lifeform>
         return (!lf.Moving || HasDestination())
             && !lf.Eating
             && !lf.Sleeping
-            && lf.Energy > 0
-            && lf.Hunger > 0;
+            && lf.Energy > 0;
     }
 
     public override void StateEffect(StateMachine<Lifeform> s)
@@ -70,6 +73,7 @@ public class LifeformWanderState: State<Lifeform>
         {
             lf.Move();
         } 
+
         if(HasReachedDestination(lf))
         {
             lf.Stop();

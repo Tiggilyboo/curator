@@ -8,7 +8,6 @@ public abstract class State<TComponent>: ScriptableObject
 {
     [SerializeField]
     private string m_Identifier;
-    
     [SerializeField]
     private State<TComponent>[] m_Transitions;
 
@@ -24,12 +23,13 @@ public abstract class State<TComponent>: ScriptableObject
 
         foreach(State<TComponent> state in m_Transitions)
         {
-            if(this == state)
-              continue;
-
             if(state.EntryCondition(s)) 
             {
+                if(state == this)
+                  return; 
+
                 s.TransitionTo(state);        
+                return;
             }
         }
 

@@ -8,10 +8,7 @@ public class LifeformIdleState: State<Lifeform>
 {
     public override bool EntryCondition(StateMachine<Lifeform> s)
     {
-        Lifeform lf = s.GetStateComponent();
-
-        return lf.Energy > 0
-            && lf.Hunger > 0;
+        return true;
     }
 
     public override void StateEffect(StateMachine<Lifeform> s)
