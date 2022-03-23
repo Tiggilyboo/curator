@@ -13,8 +13,6 @@ public class LifeformSleepState: State<Lifeform>
         float remainingIterations = lf.Energy / rate;
         float remainingTime = remainingIterations * Time.deltaTime;
 
-        Debug.Log(string.Format("Sleep time remaining: {0}", remainingTime));
-
         return remainingTime < m_SleepThresholdInSec;
     }
 
@@ -27,8 +25,6 @@ public class LifeformSleepState: State<Lifeform>
           return true;
 
         bool notSleepingAndLacksEnergy = (!lf.Sleeping && DoesLifeformRequireSleep(lf));
-
-        Debug.Log(string.Format("c1: {0}, c2: {1}", notSleepingAndLacksEnergy, sleepingAndNotFullySlept));
 
         return notSleepingAndLacksEnergy;
     }

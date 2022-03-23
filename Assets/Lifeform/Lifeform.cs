@@ -42,11 +42,6 @@ public class Lifeform : MonoBehaviour
         return Time.deltaTime * m_AgeRate;
     }
 
-    private float GetHungerRate()
-    {
-        return Time.deltaTime * m_HungerRate;
-    }
-
     private float GetSleepRate()
     {
         return Time.deltaTime * m_SleepRate;
@@ -70,6 +65,11 @@ public class Lifeform : MonoBehaviour
     public float GetMaxEnergy()
     {
         return m_MaxEnergy;
+    }
+    
+    public float GetHungerRate()
+    {
+        return Time.deltaTime * m_HungerRate;
     }
     
     public void Eat(float increment) 

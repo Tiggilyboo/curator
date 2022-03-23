@@ -1,0 +1,22 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(menuName = "AI/FSM/Lifeform/State (#SCRIPTNAME#)", fileName = "#SCRIPTNAME#")]
+public class #SCRIPTNAME#: State<Lifeform>
+{
+    // Entry condition into this state. True will transition the state machine to this state.
+    public override bool EntryCondition(StateMachine<Lifeform> s)
+    {
+        Lifeform lf = s.GetStateComponent();
+        #NOTRIM#
+    }
+
+    // Invoked every frame that the state is active in the state machine
+    public override void StateEffect(StateMachine<Lifeform> s)
+    {
+        Lifeform lf = s.GetStateComponent();
+        #NOTRIM#
+    }
+}

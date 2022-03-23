@@ -56,7 +56,8 @@ public class LifeformWanderState: State<Lifeform>
         return (!lf.Moving || HasDestination())
             && !lf.Eating
             && !lf.Sleeping
-            && lf.Energy > 0;
+            && lf.Energy > 0
+            && lf.Hunger > 0;
     }
 
     public override void StateEffect(StateMachine<Lifeform> s)
