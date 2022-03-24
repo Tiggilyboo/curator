@@ -14,8 +14,11 @@ public class LifeformIdleState: State<Lifeform>
     public override void StateEffect(StateMachine<Lifeform> s)
     {
         Lifeform lf = s.GetStateComponent();
-        lf.Stop();
+        LifeformNavigation nav = lf.GetNavigation();
 
+        nav.ResetPath();
+
+        lf.Stop();
         lf.DecrementEnergy();
         lf.DecrementHunger();
         lf.IncrementAge();

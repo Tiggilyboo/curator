@@ -11,7 +11,7 @@ public abstract class StateMachine<TComponent>: MonoBehaviour
     [SerializeField]
     private State<TComponent> m_CurrentState;
 
-    public State<TComponent> CurrentState => m_CurrentState;
+    public State<TComponent> GetCurrentState() => m_CurrentState;
     public TComponent GetStateComponent() => m_Component;
 
     public void TransitionTo(State<TComponent> state)

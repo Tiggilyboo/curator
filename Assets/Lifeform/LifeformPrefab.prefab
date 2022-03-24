@@ -105,7 +105,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6341172289964428212}
   - component: {fileID: 8997506443063793376}
-  - component: {fileID: 2542990782341606854}
+  - component: {fileID: 2611213940630438567}
+  - component: {fileID: 1181615686552343271}
+  - component: {fileID: 272657078985130122}
   m_Layer: 0
   m_Name: LifeformPrefab
   m_TagString: Player
@@ -146,7 +148,30 @@ MonoBehaviour:
   m_Hunger: 10
   m_Age: 0
   m_Energy: 10
---- !u!114 &2542990782341606854
+  m_Navigation: {fileID: 1181615686552343271}
+--- !u!195 &2611213940630438567
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8225920362799986264}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 3
+--- !u!114 &1181615686552343271
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,12 +180,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 8225920362799986264}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 911596f655f16f560a49602e774e1618, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a6f6b35df9a4a903a12763191d0a079, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CurrentState: {fileID: 11400000, guid: f9fe0e1b544e3a47baaf565baaca6e90, type: 2}
+  m_NavAgent: {fileID: 2611213940630438567}
+  m_Lifeform: {fileID: 8997506443063793376}
+--- !u!114 &272657078985130122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8225920362799986264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccdc85caf5de03270bec665d5b842c69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_Component: {fileID: 8997506443063793376}
-  m_Transitions:
-  - m_PositiveState: {fileID: 0}
-    m_NegativeState: {fileID: 0}
-    m_Condition: {fileID: 0}
+  m_CurrentState: {fileID: 11400000, guid: 8c6c51d4c42717fbbbc31703aba1a98e, type: 2}

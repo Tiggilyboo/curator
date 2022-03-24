@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.AI;
 
-public class LifeformBehaviour: StateMachine<Lifeform>
+public class LifeformStateMachine: StateMachine<Lifeform>
 {
     public void Update() 
     {

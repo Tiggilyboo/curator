@@ -7,7 +7,7 @@ using UnityEngine;
 public class LifeformEatState: State<Lifeform>
 {
     [SerializeField]
-    private float m_HungerThresholdInSec = 20.0f;
+    private float m_HungerThresholdInSec = 5.0f;
 
     private bool DoesLifeformRequireFood(Lifeform lf)
     {
@@ -23,7 +23,13 @@ public class LifeformEatState: State<Lifeform>
     {
         Lifeform lf = s.GetStateComponent();
 
-        return DoesLifeformRequireFood(lf);
+        bool notEatingAndHungry = (!lf.Eating && DoesLifeformRequireFood(lf));
+        if(notEatingAndHungry)
+          return true;
+
+        bool eatingAndNotFull = (lf.Eating && lf.Hunger < lf.GetMaxHunger());
+        
+        return eatingAndNotFull;
     }
 
     // Invoked every frame that the state is active in the state machine
@@ -34,5 +40,7 @@ public class LifeformEatState: State<Lifeform>
         // TODO: Not sure if inventory driven, or location on map (stockpile / foraging?)
         // Should probably do a timer here too...
         lf.Eat(5.0f * Time.deltaTime);
+        lf.IncrementAge();
+        lf.DecrementEnergy();
     }
 }

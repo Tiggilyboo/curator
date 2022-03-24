@@ -12,12 +12,16 @@ public class Lifeform : MonoBehaviour
     private bool m_Eating;
     [SerializeField]
     private bool m_Sleeping;
+
     [SerializeField]
     private float m_Hunger;
     [SerializeField]
     private float m_Age;
     [SerializeField]
     private float m_Energy;
+
+    [SerializeField]
+    private LifeformNavigation m_Navigation;
     
     // To later be derived from genetics
     private float m_Eyesight = 8.0f;
@@ -26,7 +30,7 @@ public class Lifeform : MonoBehaviour
     private float m_MaxEnergy = 10.0f;
     private float m_AgeRate = 0.0001f;
     private float m_HungerRate = 0.2f;
-    private float m_MoveRate = 200.0f;
+    private float m_MoveRate = 3.0f;
     private float m_EnergyRate = 0.1f;
     private float m_SleepRate = 3.0f;
 
@@ -36,6 +40,8 @@ public class Lifeform : MonoBehaviour
     public float Hunger => m_Hunger;
     public float Age => m_Age;
     public float Energy => m_Energy;
+
+    public LifeformNavigation GetNavigation() => m_Navigation;
 
     private float GetAgeRate() 
     {
@@ -59,7 +65,7 @@ public class Lifeform : MonoBehaviour
     
     public float GetMoveRate()
     {
-        return Time.deltaTime * m_MoveRate;
+        return m_MoveRate;
     }
 
     public float GetMaxEnergy()
@@ -71,18 +77,23 @@ public class Lifeform : MonoBehaviour
     {
         return Time.deltaTime * m_HungerRate;
     }
+
+    public float GetMaxHunger()
+    {
+        return m_MaxHunger;
+    }
     
     public void Eat(float increment) 
     {
+        Stop();
         m_Eating = true;
         m_Hunger += increment;
     }
 
     public void Sleep() 
     {
+        Stop();
         m_Sleeping = true;
-        m_Moving = false;
-        m_Eating = false;
         m_Energy += GetSleepRate();
     }
 
@@ -114,11 +125,6 @@ public class Lifeform : MonoBehaviour
     {
         m_Energy -= GetEnergyRate();
     }
-
-    public void LookAt(Vector3 point) => transform.LookAt(point);
-    public void Translate(Vector3 movement) => transform.Translate(movement);
-    public Vector3 GetPosition() => transform.position;
-    public Vector3 GetForward() => transform.forward;
 
     // Start is called before the first frame update
     void Start()

@@ -20,6 +20,9 @@ public class LifeformSleepState: State<Lifeform>
     {
         Lifeform lf = s.GetStateComponent();
 
+        if(lf.Moving || lf.Eating)
+          return false;
+
         bool sleepingAndNotFullySlept = (lf.Sleeping && lf.Energy < lf.GetMaxEnergy());
         if(sleepingAndNotFullySlept)
           return true;
