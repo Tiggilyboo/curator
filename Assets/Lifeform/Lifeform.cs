@@ -22,17 +22,19 @@ public class Lifeform : MonoBehaviour
 
     [SerializeField]
     private LifeformNavigation m_Navigation;
+
+    [SerializeField]
+    private LifeformGenetics m_Genetics;
     
-    // To later be derived from genetics
-    private float m_Eyesight = 8.0f;
-    private float m_MaxHunger = 10.0f;
-    private float m_MaxAge = 100.0f;
-    private float m_MaxEnergy = 10.0f;
-    private float m_AgeRate = 0.0001f;
-    private float m_HungerRate = 0.2f;
-    private float m_MoveRate = 3.0f;
-    private float m_EnergyRate = 0.1f;
-    private float m_SleepRate = 3.0f;
+    private float m_Eyesight;
+    private float m_MaxHunger;
+    private float m_MaxAge;
+    private float m_MaxEnergy;
+    private float m_AgeRate;
+    private float m_HungerRate;
+    private float m_MoveRate;
+    private float m_EnergyRate;
+    private float m_SleepRate;
 
     public bool Moving => m_Moving; 
     public bool Eating => m_Eating;
@@ -129,6 +131,18 @@ public class Lifeform : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Populate from genetics
+        m_Eyesight = m_Genetics.GetEyesight();
+        m_MaxHunger = m_Genetics.GetMaxHunger();
+        m_MaxAge = m_Genetics.GetMaxAge();
+        m_MaxEnergy = m_Genetics.GetMaxEnergy();
+        m_AgeRate = m_Genetics.GetMaxAge();
+        m_HungerRate = m_Genetics.GetHungerRate();
+        m_MoveRate = m_Genetics.GetMoveRate();
+        m_EnergyRate = m_Genetics.GetEnergyRate();
+        m_SleepRate = m_Genetics.GetSleepRate();
+
+        // Set to maximums
         m_Hunger = m_MaxHunger;
         m_Energy = m_MaxEnergy;
     } 
