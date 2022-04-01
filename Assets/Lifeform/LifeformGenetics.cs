@@ -1,43 +1,52 @@
+using System;
 using UnityEngine;
 using Trait = GeneticTraitType;
 
-public class LifeformGenetics: MonoBehaviour
+public class LifeformGenetics: Genetics
 {
     [SerializeField]
-    private Genetics m_Genetics;
-    
-    public float GetMaxEnergy() => m_Genetics.GetTrait(Trait.Energy).AsFloat(m_Genetics);
-    public float GetMaxHunger() => m_Genetics.GetTrait(Trait.Hunger).AsFloat(m_Genetics);
-    public int GetMaxAge() => m_Genetics.GetTrait(Trait.Age).AsInt(m_Genetics);
-    public float GetMoveRate() => m_Genetics.GetTrait(Trait.Speed).AsFloat(m_Genetics);
-    public float GetEyesight() => m_Genetics.GetTrait(Trait.Eyesight).AsFloat(m_Genetics);
+    private float m_Eyesight;
+    [SerializeField]
+    private float m_MaxHunger;
+    [SerializeField]
+    private float m_MaxAge;
+    [SerializeField]
+    private float m_MaxEnergy;
+    [SerializeField]
+    private float m_AgeRate;
+    [SerializeField]
+    private float m_HungerRate;
+    [SerializeField]
+    private float m_MoveRate;
+    [SerializeField]
+    private float m_EnergyRate;
+    [SerializeField]
+    private float m_SleepRate;
 
-    public float GetSleepRate() => m_Genetics.GetTrait(Trait.Energy).AsUnitFloat(m_Genetics);
-    public float GetHungerRate() => m_Genetics.GetTrait(Trait.Hunger).AsUnitFloat(m_Genetics);
-    public float GetEnergyRate() => m_Genetics.GetTrait(Trait.Energy).AsUnitFloat(m_Genetics);
-
-    private bool DeadOnArrival() {
-        return GetMaxEnergy() < 10.0f
-          || GetMaxHunger() <= 1.0f
-          || GetMaxAge() < 10
-          || GetMoveRate() < 1.0f
-          || GetEyesight() < 1.0f
-          || GetSleepRate() <= 0.0f
-          || GetHungerRate() <= 0.0f
-          || GetEnergyRate() <= 0.0f;
-          
-    }
-
-    void Start()
+    public override void Initialize()
     {
-        if(m_Genetics == null) 
-        {
-            m_Genetics = gameObject.AddComponent<Genetics>() as Genetics;
+        base.Initialize();
 
-            do {
-              m_Genetics.InitializeGenetics();
-            }
-            while(DeadOnArrival());
-        }
+        m_MaxEnergy = GetTrait(Trait.Energy).AsFloat(this);
+        m_MaxHunger = GetTrait(Trait.Hunger).AsFloat(this);
+        m_MaxAge = GetTrait(Trait.Age).AsInt(this);
+        m_MoveRate = GetTrait(Trait.Speed).AsFloat(this);
+        m_Eyesight = GetTrait(Trait.Eyesight).AsFloat(this);
+        m_SleepRate = GetTrait(Trait.Energy).AsUnitFloat(this);
+        m_HungerRate = GetTrait(Trait.Hunger).AsUnitFloat(this);
+        m_EnergyRate = GetTrait(Trait.Energy).AsUnitFloat(this);
+
+        m_AgeRate = m_MaxAge % 1.0f;
     }
+
+    public float GetAgeRate() => Time.deltaTime * m_AgeRate;
+    public float GetEnergyRate() => Time.deltaTime * m_EnergyRate;
+    public float GetHungerRate() => Time.deltaTime * m_HungerRate;
+    public float GetSleepRate() => Time.deltaTime * m_SleepRate;
+
+    public float GetMoveRate() => m_MoveRate;
+    public float GetEyesightDistance() => m_Eyesight;
+    public float GetMaxEnergy() => m_MaxEnergy;
+    public float GetMaxHunger() => m_MaxHunger;
+    public float GetMaxAge() => m_MaxAge;
 }

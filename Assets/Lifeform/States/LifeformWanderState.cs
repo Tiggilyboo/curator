@@ -20,7 +20,7 @@ public class LifeformWanderState: State<Lifeform>
             1.0f, // Something above the main walkable object
             range * (-1.0f + Random.value * 2.0f));
 
-        Vector3 rayOrigin = lf.GetNavigation().GetPosition() + randomWithinRadius;
+        Vector3 rayOrigin = lf.Navigation.GetPosition() + randomWithinRadius;
         
         if(Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, range, m_Walkable))
         {
@@ -36,7 +36,7 @@ public class LifeformWanderState: State<Lifeform>
 
         if(nextDestination.HasValue) 
         {
-            lf.GetNavigation().SetDestination(nextDestination.Value);
+            lf.Navigation.SetDestination(nextDestination.Value);
         }
 
         return nextDestination.HasValue;
@@ -45,9 +45,8 @@ public class LifeformWanderState: State<Lifeform>
     public override bool EntryCondition(StateMachine<Lifeform> stateMachine)
     {
         Lifeform lf = stateMachine.GetStateComponent();
-        LifeformNavigation nav = lf.GetNavigation();
 
-        return (!lf.Moving || nav.HasPath())
+        return (!lf.Moving || lf.Navigation.HasPath())
             && !lf.Eating
             && !lf.Sleeping;
     }
@@ -55,11 +54,11 @@ public class LifeformWanderState: State<Lifeform>
     public override void StateEffect(StateMachine<Lifeform> stateMachine)
     {
         Lifeform lf = stateMachine.GetStateComponent();
-        LifeformNavigation nav = lf.GetNavigation();
+        LifeformNavigation nav = lf.Navigation;
 
         if(!nav.HasPath())
         {
-            if(SetDestinationInRange(lf, lf.GetEyesightDistance())) 
+            if(SetDestinationInRange(lf, lf.Genetics.GetEyesightDistance())) 
             {
                 Vector3 dest = nav.GetDestination();
                 nav.LookAt(dest);

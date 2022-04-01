@@ -9,7 +9,7 @@ public class LifeformSleepState: State<Lifeform>
 
     private bool DoesLifeformRequireSleep(Lifeform lf) 
     {
-        float rate = lf.GetEnergyRate();
+        float rate = lf.Genetics.GetEnergyRate();
         float remainingIterations = lf.Energy / rate;
         float remainingTime = remainingIterations * Time.deltaTime;
 
@@ -23,7 +23,7 @@ public class LifeformSleepState: State<Lifeform>
         if(lf.Moving || lf.Eating)
           return false;
 
-        bool sleepingAndNotFullySlept = (lf.Sleeping && lf.Energy < lf.GetMaxEnergy());
+        bool sleepingAndNotFullySlept = (lf.Sleeping && lf.Energy < lf.Genetics.GetMaxEnergy());
         if(sleepingAndNotFullySlept)
           return true;
 

@@ -11,7 +11,7 @@ public class LifeformEatState: State<Lifeform>
 
     private bool DoesLifeformRequireFood(Lifeform lf)
     {
-        float rate = lf.GetHungerRate();
+        float rate = lf.Genetics.GetHungerRate();
         float remainingIterations = lf.Hunger / rate;
         float remainingTime = remainingIterations * Time.deltaTime;
 
@@ -27,7 +27,7 @@ public class LifeformEatState: State<Lifeform>
         if(notEatingAndHungry)
           return true;
 
-        bool eatingAndNotFull = (lf.Eating && lf.Hunger < lf.GetMaxHunger());
+        bool eatingAndNotFull = (lf.Eating && lf.Hunger < lf.Genetics.GetMaxHunger());
         
         return eatingAndNotFull;
     }
