@@ -13,7 +13,7 @@ public abstract class Genetics: MonoBehaviour
     [SerializeField]
     private float m_CrossoverRate = 0.65f;
     [SerializeField]
-    private float m_MutationRate = 0.08f;
+    private float m_MutationRate = 0.01f;
     [SerializeField]
     private int m_GeneticDataSize = 32;
     [SerializeField]
@@ -21,11 +21,12 @@ public abstract class Genetics: MonoBehaviour
     [SerializeField]
     private GeneticTrait[] m_Traits;
     
-    private static GeneticTraitType GetTraitType(int idx) {
+    private static GeneticTraitType GetTraitType(int idx) 
+    {
         return (GeneticTraitType)(idx % (int)GeneticTraitType.COUNT);
     }
     
-    // Determine a crossover value between parent1 and parent2
+    // Determine a crossover value between two values based on the genetics crossover ratio
     private int CrossValue(int parent1Size, int parent2Size) 
     {
         float crossChance = Random.value * m_CrossoverRate;
@@ -45,6 +46,7 @@ public abstract class Genetics: MonoBehaviour
         return (min + ((max - min) * Random.value));
     }
     
+    // Copy part of another genetic makeup into this one split by a position / index
     private void SwapWith(Genetics otherGenes, int position) 
     {
         for(int i = 0; i < position; i++) 
@@ -99,6 +101,7 @@ public abstract class Genetics: MonoBehaviour
           m_Data[i] = (byte)Random.Range(0, 255);
     }
     
+    // Initialize the genetics from two parents
     public void InitializeFromParents(Genetics parent1, Genetics parent2) 
     {
         m_CrossoverRate = CrossRate(parent1.GetCrossoverRate(), parent2.GetCrossoverRate());
@@ -116,10 +119,9 @@ public abstract class Genetics: MonoBehaviour
             int crossDSize = (int)(newSize * crossAt);
             int crossTSize = (int)(newTSize * crossAt);
             
-            // 50% chance one of the parents
-            Genetics parent = crossAt > 0.5f
-              ? parent2 
-              : parent1;
+            Genetics parent = crossAt > Random.value
+                ? parent2 
+                : parent1;
 
             IEnumerable<byte> parentData = parent.GetData();
             for(int i = 0; i < newSize; i++) 
@@ -142,7 +144,7 @@ public abstract class Genetics: MonoBehaviour
               m_Data[i] = (byte)Random.Range(0, 255);
         }
 
-        // Assign mutation to traits, ensure we do not overlap with the other traits
+        // Mutation to traits, ensure we do not overlap with the other traits
         int lastTraitBoundary = m_Traits.Length > 0 
           ? m_Traits[0].Start
           : 0;
@@ -169,7 +171,8 @@ public abstract class Genetics: MonoBehaviour
         if(idx == (int)GeneticTraitType.COUNT)
           throw new ArgumentException("Invalid trait index");
         if(idx >= m_Traits.Length)
-          throw new ArgumentException(string.Format("Not enough traits: {0}, wanted {1}", m_Traits.Length, idx));
+          throw new ArgumentException(string.Format(
+                "Not enough traits, genetics only contains {0} traits, wanted {1}", m_Traits.Length, idx));
 
         return m_Traits[(int)tt];
     }

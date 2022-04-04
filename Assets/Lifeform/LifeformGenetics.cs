@@ -13,8 +13,6 @@ public class LifeformGenetics: Genetics
     [SerializeField]
     private float m_MaxEnergy;
     [SerializeField]
-    private float m_AgeRate;
-    [SerializeField]
     private float m_HungerRate;
     [SerializeField]
     private float m_MoveRate;
@@ -23,30 +21,42 @@ public class LifeformGenetics: Genetics
     [SerializeField]
     private float m_SleepRate;
 
+    // Currently just consume the start byte and use u8 as the upperbound
+    private float TraitToByteFloat(Trait t)
+    {
+        byte gene = GetTrait(t).AsByte(this);
+
+        return (float)gene / 255.0f;
+    }
+
+    // [-1, 1]
+    private float TraitToByteUnitFloat(Trait t)
+    {
+        return 1.0f - TraitToByteFloat(t) * 2.0f;
+    }
+
+    // TODO: Too magical
     public override void Initialize()
     {
         base.Initialize();
 
-        m_MaxEnergy = GetTrait(Trait.Energy).AsFloat(this);
-        m_MaxHunger = GetTrait(Trait.Hunger).AsFloat(this);
-        m_MaxAge = GetTrait(Trait.Age).AsInt(this);
-        m_MoveRate = GetTrait(Trait.Speed).AsFloat(this);
-        m_Eyesight = GetTrait(Trait.Eyesight).AsFloat(this);
-        m_SleepRate = GetTrait(Trait.Energy).AsUnitFloat(this);
-        m_HungerRate = GetTrait(Trait.Hunger).AsUnitFloat(this);
-        m_EnergyRate = GetTrait(Trait.Energy).AsUnitFloat(this);
-
-        m_AgeRate = m_MaxAge % 1.0f;
+        m_MaxAge = GetTrait(Trait.Age).AsInt(this) % (2 * 60 * 60);
+        m_MaxEnergy = TraitToByteFloat(Trait.Energy) * 500;
+        m_MaxHunger = TraitToByteFloat(Trait.Hunger) * 100;
+        m_MoveRate = TraitToByteFloat(Trait.Speed) * 10;
+        m_Eyesight = TraitToByteFloat(Trait.Eyesight) * 25;
+        m_SleepRate = TraitToByteUnitFloat(Trait.Energy);
+        m_HungerRate = TraitToByteUnitFloat(Trait.Hunger);
+        m_EnergyRate = TraitToByteUnitFloat(Trait.Energy);
     }
-
-    public float GetAgeRate() => Time.deltaTime * m_AgeRate;
-    public float GetEnergyRate() => Time.deltaTime * m_EnergyRate;
-    public float GetHungerRate() => Time.deltaTime * m_HungerRate;
-    public float GetSleepRate() => Time.deltaTime * m_SleepRate;
-
-    public float GetMoveRate() => m_MoveRate;
+    
     public float GetEyesightDistance() => m_Eyesight;
     public float GetMaxEnergy() => m_MaxEnergy;
     public float GetMaxHunger() => m_MaxHunger;
     public float GetMaxAge() => m_MaxAge;
+
+    public float GetEnergyRate() => Time.deltaTime * m_EnergyRate;
+    public float GetHungerRate() => Time.deltaTime * m_HungerRate;
+    public float GetSleepRate() => Time.deltaTime * m_SleepRate;
+    public float GetMoveRate() => m_MoveRate;
 }

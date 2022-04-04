@@ -23,15 +23,25 @@ public class GeneticTrait: ICloneable
 {
     [SerializeField]
     private GeneticTraitType m_Type;
-    [SerializeField]
-    private int m_Start;
-    [SerializeField]
-    private int m_End;
 
-    private T Convert<T>(Func<byte[], int, T> converter, Genetics genes)
+    private int m_Start;
+    private int m_End;
+    
+    public GeneticTraitType Identifier => m_Type;
+    public int Start => m_Start;
+    public int End => m_End;
+
+    public int Count() => m_End - m_Start;
+
+    private void CheckValid()
     {
         if (m_Start >= m_End)
             throw new InvalidOperationException("Start index > end index");
+    }
+
+    private T Convert<T>(Func<byte[], int, T> converter, Genetics genes)
+    {
+        CheckValid();
         
         int size = Marshal.SizeOf<T>();
         IEnumerable<byte> geneSegment = genes.GetDataForTrait(this);
@@ -55,7 +65,7 @@ public class GeneticTrait: ICloneable
 
     public float AsUnitFloat(Genetics gene)
     {
-        return Mathf.Abs(AsFloat(gene) % 1.0f);
+        return 1.0f - (AsFloat(gene) % 1.0f) * 2.0f;
     }
     
     public double AsDouble(Genetics gene)
@@ -78,6 +88,16 @@ public class GeneticTrait: ICloneable
         return Convert(BitConverter.ToChar, gene);
     }
 
+    public byte AsByte(Genetics gene) 
+    {
+        CheckValid();
+
+        return gene.GetData()
+          .Skip(m_Start)
+          .Take(1)
+          .SingleOrDefault();
+    }
+
     public string AsString(Genetics gene)
     {
         if (m_Start > m_End)
@@ -98,18 +118,10 @@ public class GeneticTrait: ICloneable
         };
 
         for (int i = 0; i < len; i++)
-        {
             sb.Append(AsChar(gene));
-        }
 
         return sb.ToString();
     }
-
-    public GeneticTraitType Identifier => m_Type;
-
-    public int Count() => m_End - m_Start;
-    public int Start => m_Start;
-    public int End => m_End;
 
     public GeneticTrait(GeneticTraitType type, int start, int end)
     {

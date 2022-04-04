@@ -8,10 +8,10 @@ public class LifeformNavigation: MonoBehaviour
 
     public NavMeshAgent GetNavMeshAgent() => m_NavAgent;
     public Vector3 GetPosition() => transform.position;
-    public void LookAt(Vector3 point) => transform.LookAt(point);
     public Vector3 GetDestination() => m_NavAgent.destination;
     public float GetDistanceRemaining() => m_NavAgent.remainingDistance;
     public bool HasPath() => m_NavAgent.hasPath;
+    public void LookAt(Vector3 point) => transform.LookAt(point);
 
     public void ResetPath() 
     {
@@ -32,6 +32,11 @@ public class LifeformNavigation: MonoBehaviour
     public void SetMoveRate(float moveRate)
     {
         m_NavAgent.speed = moveRate;
+    }
+
+    public bool CanNavigate() 
+    {
+        return m_NavAgent.isOnNavMesh || m_NavAgent.isOnOffMeshLink;
     }
 
     public void OnDrawGizmos()

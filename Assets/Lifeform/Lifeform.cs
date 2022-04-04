@@ -5,12 +5,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // TODO: This is a horrific mess. Split some of these things up
+[RequireComponent(typeof(Rigidbody))]
 public class Lifeform : MonoBehaviour
 {
     private bool m_Initialized;
-    // In order to judge fitness, we guage how long they have stayed alive...
     private float m_TimeOfBirth;
     private float m_TimeOfDeath;
+    
+    [SerializeField]
+    private GameObject m_LifeformPrefab;
 
     // TODO: I feel like these could be bitwise flagged in an enum?
     //  Or, do we check the state machine state instead?
@@ -36,9 +39,10 @@ public class Lifeform : MonoBehaviour
     private LifeformNavigation m_Navigation;
     [SerializeField]
     private LifeformStateMachine m_StateMachine;
-
     [SerializeField]
-    private GameObject m_LifeformPrefab;
+    private LifeformPerception m_Perception;
+    [SerializeField]
+    private LifeformInterests m_Interests;
 
     // Lifeform Stats
     public bool Moving => m_Moving; 
@@ -52,15 +56,30 @@ public class Lifeform : MonoBehaviour
     public LifeformNavigation Navigation => m_Navigation;
     public LifeformGenetics Genetics => m_Genetics;
     public LifeformStateMachine StateMachine => m_StateMachine;
+    public LifeformPerception Perception => m_Perception;
+    public LifeformInterests Interests => m_Interests;
 
     public float GetBirthTime() => m_TimeOfBirth;
-    public float GetAliveTime() => m_TimeOfDeath - m_TimeOfBirth;
+    public float GetAliveTime() 
+    {
+        if(Dead)
+          return m_TimeOfDeath - m_TimeOfBirth;
+        else
+          return Time.realtimeSinceStartup - m_TimeOfBirth;
+    }
 
     public void Die()
     {
         Stop();
         m_Dead = true;
         m_TimeOfDeath = Time.realtimeSinceStartup;
+
+        // Super smelly pile.
+        // TODO: Stijn, how do I ensure the OnTriggerExit is called for destroyed objects?
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.detectCollisions = false;
+        rb.WakeUp();
+        GameObject.Destroy(gameObject, 0.1f);
     }
     
     public void Eat(float increment) 
@@ -93,8 +112,9 @@ public class Lifeform : MonoBehaviour
 
     public Lifeform Breed(Lifeform other)
     {
-        GameObject childObj = Instantiate(m_LifeformPrefab, transform.parent);
+        GameObject childObj = Instantiate(m_LifeformPrefab);
         childObj.name = "Lifeform";
+
         Lifeform child = childObj.GetComponent<Lifeform>();
         LifeformGenetics childGenes = child.Genetics;
         child.Initialize(childGenes);
@@ -104,7 +124,7 @@ public class Lifeform : MonoBehaviour
 
     public void IncrementAge()
     {
-        m_Age += Genetics.GetAgeRate();
+        m_Age += Time.deltaTime;
     }
 
     public void DecrementHunger()
@@ -114,16 +134,12 @@ public class Lifeform : MonoBehaviour
 
     public void DecrementEnergy()
     {
-        m_Energy -= Genetics.GetEnergyRate();
+        if(Moving)
+          m_Energy -= Genetics.GetEnergyRate() * Genetics.GetMoveRate();
+        else
+          m_Energy -= Genetics.GetEnergyRate();
     }
 
-    public void Reset()
-    {
-        m_Initialized = false;
-        Initialize(m_Genetics);
-    }
-
-    // TODO: Surely theres a better way... with this madness of hierarchy & codependence
     public void Initialize(LifeformGenetics genetics)
     {
         if(m_Initialized)
@@ -135,24 +151,20 @@ public class Lifeform : MonoBehaviour
 
         m_Genetics = genetics;
         m_Genetics.Initialize();
-
+        
         float moveRate = m_Genetics.GetMoveRate();
         if(moveRate != float.NaN && moveRate > 0.0)
         {
             m_Navigation.SetMoveRate(m_Genetics.GetMoveRate());
-
-            // Set to maximums / start values
-            m_Hunger = m_Genetics.GetMaxHunger();
-            m_Energy = m_Genetics.GetMaxEnergy();
-            m_Age = 0;
-
-            m_TimeOfBirth = Time.realtimeSinceStartup;
-            m_TimeOfDeath = 0;
-            m_Initialized = true;
-        } 
-        else  // Probably not the greatest, but saves a few iterations 
-        {
-            Die();
         }
-    } 
+        
+        // Set to maximums / start values
+        m_Hunger = m_Genetics.GetMaxHunger();
+        m_Energy = m_Genetics.GetMaxEnergy();
+        m_Age = 0;
+
+        m_TimeOfBirth = Time.realtimeSinceStartup;
+        m_TimeOfDeath = 0;
+        m_Initialized = true;
+    }
 }

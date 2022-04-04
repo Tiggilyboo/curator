@@ -2,8 +2,11 @@ using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
+using UnityEngine;
+using Random = UnityEngine.Random;
+
+// A behaviour which spawns and simulates lifeforms
 public class Incubator: MonoBehaviour
 {
     public delegate Lifeform RandomLifeFactoryDelegate();
@@ -11,24 +14,60 @@ public class Incubator: MonoBehaviour
     
     private List<Lifeform> m_Pool;
 
+    // Number of total lifeforms to simulate and manage.
     [SerializeField]
-    private int m_PoolSize = 64;
+    private int m_PoolSize = 256;
+
+    // Number of lifeforms to select and breed when m_BreedFittest is enabled
     [SerializeField]
-    private int m_PoolBatchSize = 4;
+    private int m_PoolBatchSize = 16;
+
+    // The lifeform prefab to use when spawning
     [SerializeField]
     private GameObject m_LifeformPrefab;
+
+    // Enable to automatically breed the fittest Lifeform's together
     [SerializeField]
-    private bool m_LiveSimulation = true;
+    private bool m_BreedFittest = true;
 
     private RandomLifeFactoryDelegate m_RandomLifeFactory;
     private EvolutionFactoryDelegate m_EvolutionFactory;
+
+    // Since we are mutating bytes when breeding, these numbers go out of bounds.
+    // Not sure how best to manage this, or have it just die...
+    private static bool HasMinimumViableGenetics(Lifeform lf)
+    {
+        LifeformGenetics g = lf.Genetics;
+
+        float rHunger = g.GetHungerRate();
+        float rSleep = g.GetSleepRate();
+        float rEnergy = g.GetEnergyRate();
+        float eyesight = g.GetEyesightDistance();
+        float rMove = g.GetMoveRate();
+
+        return rHunger > 0.00001f
+            && rSleep > 0.00001f
+            && rEnergy > 0.000001f
+            && eyesight > 0.5f
+            && rMove > 0;
+    }
+
+    private void DisposeLifeform(Lifeform lf)
+    {
+        if(lf == null)
+          return;
+
+        GameObject.Destroy(lf.gameObject);
+    }
 
     private Lifeform DefaultRandomLifeFactory() 
     {
         GameObject lifeformObj = Instantiate(m_LifeformPrefab, transform.parent);
         lifeformObj.name = "Lifeform";
-
-        lifeformObj.SetActive(m_LiveSimulation);
+        
+        Vector3 offset = transform.position;
+        Vector3 randomAround = Random.insideUnitCircle;
+        lifeformObj.transform.position = transform.position + new Vector3(randomAround.x, 0, randomAround.y) * 5.0f;
 
         if(lifeformObj.GetComponent<LifeformStateMachine>() == null)
           throw new Exception();
@@ -57,66 +96,111 @@ public class Incubator: MonoBehaviour
         int generate = m_PoolSize - m_Pool.Count();
         while(generate > 0)
         {
-           m_Pool.Add(m_RandomLifeFactory.Invoke()); 
-           generate--;
-
-           Debug.Log(string.Format("Generated random life: {0} remaining", generate));
-        }
-    }
-
-    public void Incubate() 
-    {
-        if(m_Pool.Count(l => l.Dead) < m_PoolBatchSize)
-          return;
-
-        List<Lifeform> aliveTheLongest = m_Pool
-          .Where(p => p.Dead)
-          .OrderByDescending(p => p.GetAliveTime())
-          .ToList();
-
-        // TODO: not performant in the slightest
-        List<Lifeform> offspring = new List<Lifeform>();
-        for(int x = 0; x < aliveTheLongest.Count(); x++)
-        {
-            Lifeform l1 = aliveTheLongest[x];
-            if(l1 == null)
-              aliveTheLongest.RemoveAt(x);
-
-            for(int y = 0; y < aliveTheLongest.Count(); y++)
+            Lifeform newLife = m_RandomLifeFactory();
+            if(!HasMinimumViableGenetics(newLife)) 
             {
-                if(x >= m_PoolBatchSize || y >= m_PoolBatchSize)
-                  continue;
-
-                Lifeform l2 = aliveTheLongest[y];
-                if(l2 == null)
-                  aliveTheLongest.RemoveAt(y);
-
-                // Super insestual anyways, but hermaphroditic is just too far...
-                if(l1 == l2)
-                  continue;
-
-                Lifeform child = m_EvolutionFactory.Invoke(l1, l2);
-                offspring.Add(child);
-            }
-
-            if(x >= m_PoolBatchSize) 
-            {
-                GameObject.Destroy(l1.gameObject);
-                aliveTheLongest.RemoveAt(x);
+                DisposeLifeform(newLife);
                 continue;
             }
 
-            l1.Reset(); 
+            m_Pool.Add(newLife);
+            generate--;
         }
+    }
+
+    // TODO: dirty, coffee inspired
+    private List<Lifeform> BreedFittest(Lifeform fittest)
+    {
+        var offspring = new List<Lifeform>();
+
+        Lifeform[] longestLivingLifeforms = m_Pool
+          .OrderByDescending(p => p.GetAliveTime())
+          .Take(m_PoolBatchSize)
+          .ToArray();
+
+        for(int y = 0; y < longestLivingLifeforms.Length; y++)
+        {
+            Lifeform candidate = longestLivingLifeforms[y];
+            if(candidate == null) 
+                continue;
+
+            // Avoid hermaphrodites for now...
+            if(fittest == candidate)
+                continue;
+            
+            bool valid = false;
+            while(!valid)
+            {
+                if(fittest == null || candidate == null)
+                  break;
+
+                Lifeform child = m_EvolutionFactory.Invoke(fittest, candidate);
+                if(HasMinimumViableGenetics(child)) 
+                {
+                    child.gameObject.transform.position = fittest.transform.position 
+                      + Vector3.up * 2.0f;
+
+                    valid = true;
+                    offspring.Add(child);
+                    break;
+                }
+                else 
+                    DisposeLifeform(child);
+            } 
+
+            if(candidate.Dead)
+            {
+                DisposeLifeform(candidate); 
+            }
+        }
+
+        return offspring;
+    }
+
+    // TODO: not performant in the slightest
+    //  Current fitness criteria is a simple rank of oldest surviving genome.
+    public void Incubate() 
+    {
+        Lifeform fittest = null;
+        float longestLiving = 0;
+
+        for(int x = 0; x < m_Pool.Count(); x++)
+        {
+            Lifeform l1 = m_Pool[x];
+            if(l1 == null) 
+            {
+                m_Pool.RemoveAt(x);
+                continue;
+            }
+
+            if(!HasMinimumViableGenetics(l1))
+            {
+                m_Pool.RemoveAt(x);
+                DisposeLifeform(l1);
+                continue;
+            }
+
+            float l1time = l1.GetAliveTime();
+            if(l1time > longestLiving)
+            {
+                fittest = l1;
+                longestLiving = l1time;
+                continue;
+            }
+        }
+
+        if(fittest == null || !m_BreedFittest)
+          return;
         
-        m_Pool.Clear();
-        m_Pool.AddRange(aliveTheLongest);
+        List<Lifeform> offspring = BreedFittest(fittest); 
         m_Pool.AddRange(offspring);
     }
 
     void Update()
     {
-        if(m_Pool.Count() == 0) {
+        // Re populate the pool once completely depleted
+        if(m_Pool.Count() == 0) 
+        {
             FillPool();
             return;
         }
