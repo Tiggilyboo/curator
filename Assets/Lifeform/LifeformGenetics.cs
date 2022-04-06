@@ -20,6 +20,8 @@ public class LifeformGenetics: Genetics
     private float m_EnergyRate;
     [SerializeField]
     private float m_SleepRate;
+    [SerializeField]
+    private float m_BreedRate;
 
     // Currently just consume the start byte and use u8 as the upperbound
     private float TraitToByteFloat(Trait t)
@@ -40,14 +42,15 @@ public class LifeformGenetics: Genetics
     {
         base.Initialize();
 
-        m_MaxAge = GetTrait(Trait.Age).AsInt(this) % (2 * 60 * 60);
+        m_MaxAge = Mathf.Abs(GetTrait(Trait.Age).AsInt(this)) % (2 * 60 * 60);
         m_MaxEnergy = TraitToByteFloat(Trait.Energy) * 500;
         m_MaxHunger = TraitToByteFloat(Trait.Hunger) * 100;
         m_MoveRate = TraitToByteFloat(Trait.Speed) * 10;
         m_Eyesight = TraitToByteFloat(Trait.Eyesight) * 25;
         m_SleepRate = TraitToByteUnitFloat(Trait.Energy);
-        m_HungerRate = TraitToByteUnitFloat(Trait.Hunger);
-        m_EnergyRate = TraitToByteUnitFloat(Trait.Energy);
+        m_HungerRate = TraitToByteFloat(Trait.Hunger);
+        m_EnergyRate = TraitToByteFloat(Trait.Energy);
+        m_BreedRate = TraitToByteFloat(Trait.Breed);
     }
     
     public float GetEyesightDistance() => m_Eyesight;
@@ -59,4 +62,5 @@ public class LifeformGenetics: Genetics
     public float GetHungerRate() => Time.deltaTime * m_HungerRate;
     public float GetSleepRate() => Time.deltaTime * m_SleepRate;
     public float GetMoveRate() => m_MoveRate;
+    public float GetBreedRate() => m_BreedRate;
 }

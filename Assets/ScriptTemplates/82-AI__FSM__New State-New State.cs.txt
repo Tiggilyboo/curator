@@ -3,20 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI/FSM/Lifeform/State (#SCRIPTNAME#)", fileName = "#SCRIPTNAME#")]
-public class #SCRIPTNAME#: State<Lifeform>
+public class #SCRIPTNAME#: IState<Lifeform>
 {
-    // Entry condition into this state. True will transition the state machine to this state.
-    public override bool EntryCondition(StateMachine<Lifeform> s)
+    private static #SCRIPTNAME# m_Instance = new #SCRIPTNAME#();
+    public static #SCRIPTNAME# Instance => m_Instance;
+
+    public string Identifier => "#SCRIPTNAME#";
+
+    // Invoked when the state machine enters this state
+    public bool OnEntry(Lifeform lf)
     {
-        Lifeform lf = s.GetStateComponent();
+        #NOTRIM#
+    }
+
+    // Invoked when the state machine exits this state
+    public bool OnExit(Lifeform lf)
+    {
         #NOTRIM#
     }
 
     // Invoked every frame that the state is active in the state machine
-    public override void StateEffect(StateMachine<Lifeform> s)
+    //    Returns null to remain in the current state, or the state to transition to.
+    public IState<Lifeform> StateUpdate(Lifeform lf)
     {
-        Lifeform lf = s.GetStateComponent();
         #NOTRIM#
     }
 }

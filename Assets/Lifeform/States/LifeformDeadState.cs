@@ -1,26 +1,27 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI/FSM/Lifeform/New Dead State", fileName = "LifeformDeadState")]
-public class LifeformDeadState: State<Lifeform>
+public class LifeformDeadState: IState<Lifeform>
 {
-    // Entry condition into this state. True will transition the state machine to this state.
-    public override bool EntryCondition(StateMachine<Lifeform> s)
+    public static LifeformDeadState m_Instance = new LifeformDeadState();
+    public static LifeformDeadState Instance => m_Instance;
+
+    public string Identifier => "Dead";
+
+    public void OnEntry(Lifeform lf){}
+    public void OnExit(Lifeform lf){}
+
+    public IState<Lifeform> UpdateState(Lifeform lf)
     {
-        Lifeform lf = s.GetStateComponent();
+        // Ensure we no longer process the state machine (we are destroying the lifeform!)
+        lf.StateMachine.Stop();
 
-        return lf.Energy <= 0.0f
-            || lf.Hunger <= 0.0f
-            || lf.Age >= lf.Genetics.GetMaxAge();
-    }
+        // Super smelly pile.
+        // TODO: Stijn, how do I ensure the OnTriggerExit is called for destroyed objects?
+        Rigidbody rb = lf.GetComponent<Rigidbody>();
+        rb.detectCollisions = false;
+        rb.WakeUp();
+        GameObject.Destroy(lf.gameObject, 0.1f);
 
-    // Invoked every frame that the state is active in the state machine
-    public override void StateEffect(StateMachine<Lifeform> s)
-    {
-        Lifeform lf = s.GetStateComponent();
-
-        lf.Die();
+        return null;
     }
 }

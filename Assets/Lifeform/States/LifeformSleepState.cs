@@ -1,43 +1,28 @@
-using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI/FSM/Lifeform/Sleep State", fileName = "LifeformSleepState")]
-public class LifeformSleepState: State<Lifeform>
-{   
-    [SerializeField]
-    private float m_SleepThresholdInSec = 5.0f;
+public class LifeformSleepState: IState<Lifeform>
+{
+    private static LifeformSleepState m_Instance = new LifeformSleepState();
+    public static LifeformSleepState Instance => m_Instance;
 
-    private bool DoesLifeformRequireSleep(Lifeform lf) 
+    public string Identifier => "Sleeping";
+
+    public void OnExit(Lifeform lf){}
+    public void OnEntry(Lifeform lf){}
+
+    public IState<Lifeform> UpdateState(Lifeform lf)
     {
-        float rate = lf.Genetics.GetEnergyRate();
-        float remainingIterations = lf.Energy / rate;
-        float remainingTime = remainingIterations * Time.deltaTime;
+        float sleepRate = lf.Genetics.GetSleepRate();
+        if(lf.Energy + sleepRate >= lf.Genetics.GetMaxEnergy())
+          return LifeformIdleState.Instance;
 
-        return remainingTime < m_SleepThresholdInSec;
-    }
+        lf.DeltaAge();
+        lf.DeltaHunger(-lf.Genetics.GetHungerRate());
+        lf.DeltaEnergy(sleepRate);
 
-    public override bool EntryCondition(StateMachine<Lifeform> s) 
-    {
-        Lifeform lf = s.GetStateComponent();
+        if(lf.IsDying())
+          return LifeformDeadState.Instance;
 
-        if(lf.Moving || lf.Eating)
-          return false;
-
-        bool sleepingAndNotFullySlept = (lf.Sleeping && lf.Energy < lf.Genetics.GetMaxEnergy());
-        if(sleepingAndNotFullySlept)
-          return true;
-
-        bool notSleepingAndLacksEnergy = (!lf.Sleeping && DoesLifeformRequireSleep(lf));
-
-        return notSleepingAndLacksEnergy;
-    }
-
-    public override void StateEffect(StateMachine<Lifeform> s)
-    {
-        Lifeform lf = s.GetStateComponent();
-
-        lf.Sleep();
-        lf.DecrementHunger();
-        lf.IncrementAge();
+        return null;
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,12 +51,14 @@ public class LifeformInterests: MonoBehaviour
 
     public IEnumerable<LifeformInterest> GetInterests() =>  m_Interests;
 
-    public void AddInterest(LifeformIntent intent, Lifeform lifeform)
+    public bool Any() => m_Interests.Any();
+
+    public void Add(LifeformIntent intent, Lifeform lifeform)
     {
         m_Interests.Add(new LifeformInterest(intent, lifeform));
     }
 
-    public void RemoveInterest(LifeformIntent intent, GameObject gameObject)
+    public void Remove(LifeformIntent intent, GameObject gameObject)
     {
         int id = gameObject.GetInstanceID();
 
@@ -72,7 +75,7 @@ public class LifeformInterests: MonoBehaviour
         }
     }
 
-    public void RemoveInterestsWithIntent(LifeformIntent intent)
+    public void RemoveAllWith(LifeformIntent intent)
     {
         for(int i = 0; i < m_Interests.Count; i++)
         {
@@ -85,7 +88,7 @@ public class LifeformInterests: MonoBehaviour
         }
     }
 
-    public void RemoveInterest(LifeformInterest interest)
+    public void Remove(LifeformInterest interest)
     {
         for(int i = 0; i < m_Interests.Count; i++)
         {

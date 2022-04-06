@@ -13,6 +13,7 @@ public enum GeneticTraitType
     Age,
     Speed,
     Eyesight,
+    Breed,
 
     COUNT,
 }

@@ -17,9 +17,9 @@ public abstract class Genetics: MonoBehaviour
     [SerializeField]
     private int m_GeneticDataSize = 32;
     [SerializeField]
-    private Genetics[] m_Parents;
-    [SerializeField]
     private GeneticTrait[] m_Traits;
+    [SerializeField]
+    private Genetics[] m_Parents;
     
     private static GeneticTraitType GetTraitType(int idx) 
     {

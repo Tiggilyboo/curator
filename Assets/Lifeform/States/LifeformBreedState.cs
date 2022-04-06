@@ -1,122 +1,40 @@
-using System;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI/FSM/Lifeform/New Breed State", fileName = "LifeformBreedState")]
-public class LifeformBreedState: State<Lifeform>
+public class LifeformBreedState: IState<Lifeform>
 {
-    // TODO: Where do we access tags from in Unity?
-    const string TAG_PLAYER = "Player";
+    private static LifeformBreedState m_Instance = new LifeformBreedState();
+    public static LifeformBreedState Instance => m_Instance;
 
-    private float GetBreedingAge(Lifeform lf)
+    public string Identifier => "Breeding";
+
+    public void OnExit(Lifeform lf){}
+    public void OnEntry(Lifeform lf){}
+
+    private Lifeform GetBreedingInterest(Lifeform lf)
     {
-        return lf.Genetics.GetMaxAge() / 5;
-    }
-
-    public bool CanBreed(Lifeform lf)
-    {
-        return lf != null
-            && !lf.Dead 
-            && lf.Age >= GetBreedingAge(lf);
-    }
-
-    public Lifeform GetLifeformInRangeOf(Lifeform lf)
-    {
-        if(lf == null)
-          return null;
-
-        foreach(GameObject g in lf.Perception.OrderByClosest())
+        foreach(LifeformInterest i in lf.Interests.GetInterests())
         {
-            if(g == null || !g.tag.Equals(TAG_PLAYER))
-              continue;
-
-            Lifeform other = g.GetComponent<Lifeform>();
-            if(other == null)
-              continue;
-
-            if(!CanBreed(other))
-              continue;
-
-            return other;
+            if(i.Intent == LifeformIntent.Breed)
+                return i.Lifeform;
         }
 
         return null;
     }
 
-    // Entry condition into this state. True will transition the state machine to this state.
-    public override bool EntryCondition(StateMachine<Lifeform> s)
+    public IState<Lifeform> UpdateState(Lifeform lf)
     {
-        Lifeform lf = s.GetStateComponent(); 
+        lf.Delta();
+        if(lf.IsDying())
+          return LifeformDeadState.Instance;
 
-        if(lf.Dead || lf.Age < GetBreedingAge(lf))
-          return false;
-        
-        Lifeform other = null;
-        IEnumerable<LifeformInterest> breedingInterests = lf.Interests
-          .GetInterests()
-          .Where(p => p.Lifeform != null && p.Intent == LifeformIntent.Breed);
-        
-        if(!breedingInterests.Any()) 
+        Lifeform other = GetBreedingInterest(lf);
+        if(other != null) 
         {
-            other = GetLifeformInRangeOf(lf);
-            if(other != null)
-              lf.Interests.AddInterest(LifeformIntent.Breed, other);
+            lf.Breed(other);
+            lf.Interests.RemoveAllWith(LifeformIntent.Breed);
+            lf.DeltaEnergy(-lf.Genetics.GetMaxEnergy() * 0.5f);
         }
-        else
-        {
-            foreach(LifeformInterest interest in breedingInterests)
-            {
-                if(interest.Lifeform == null)
-                  lf.Interests.RemoveInterest(interest);
-            }
-        }
-
-        if(other == null)
-          return false;
-
-        return true;
-    }
-
-    // Invoked every frame that the state is active in the state machine
-    public override void StateEffect(StateMachine<Lifeform> s)
-    {
-        Lifeform lf = s.GetStateComponent();
-        LifeformInterest breedingInterest = lf.Interests.GetInterests()
-          .FirstOrDefault(i => i.Intent == LifeformIntent.Breed);
-
-        if(breedingInterest == null)
-          return;
-
-        if(breedingInterest.Lifeform == null)
-        {
-            lf.Interests.RemoveInterest(breedingInterest);
-            return;
-        }
-
-        // TODO: Pursue interest maybe as a seperate state?
-        void ChaseTarget()
-        {
-            lf.Navigation.SetDestination(breedingInterest.Object.transform.position);
-            lf.DecrementEnergy();
-            lf.DecrementHunger();
-            lf.IncrementAge();
-            return;
-        }
-
-        bool isPerceived = lf.Perception.InPerception(breedingInterest.Object);
-        if(!isPerceived) 
-        {
-            float distance = Vector3.Distance(lf.transform.position, breedingInterest.Object.transform.position);
-            if(distance < 2.0)
-            {
-                lf.Breed(breedingInterest.Lifeform);
-                lf.Interests.RemoveInterestsWithIntent(LifeformIntent.Breed);
-                return;
-            }
-        }
-
-        ChaseTarget();
+         
+        return LifeformIdleState.Instance;
     }
 }

@@ -147,11 +147,6 @@ public class Incubator: MonoBehaviour
                 else 
                     DisposeLifeform(child);
             } 
-
-            if(candidate.Dead)
-            {
-                DisposeLifeform(candidate); 
-            }
         }
 
         return offspring;

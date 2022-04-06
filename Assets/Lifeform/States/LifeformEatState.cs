@@ -1,46 +1,28 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI/FSM/Lifeform/Eating State", fileName = "LifeformEatState")]
-public class LifeformEatState: State<Lifeform>
+public class LifeformEatState: IState<Lifeform>
 {
-    [SerializeField]
-    private float m_HungerThresholdInSec = 5.0f;
+    private static LifeformEatState m_Instance = new LifeformEatState();
+    public static LifeformEatState Instance => m_Instance;
 
-    private bool DoesLifeformRequireFood(Lifeform lf)
-    {
-        float rate = lf.Genetics.GetHungerRate();
-        float remainingIterations = lf.Hunger / rate;
-        float remainingTime = remainingIterations * Time.deltaTime;
+    public string Identifier => "Eating";
 
-        return remainingTime < m_HungerThresholdInSec;
-    }
+    public void OnExit(Lifeform lf){}
+    public void OnEntry(Lifeform lf){}
 
-    // Entry condition to this state. Truthy will transition the state machine to this state.
-    public override bool EntryCondition(StateMachine<Lifeform> s)
-    {
-        Lifeform lf = s.GetStateComponent();
-
-        bool notEatingAndHungry = (!lf.Eating && DoesLifeformRequireFood(lf));
-        if(notEatingAndHungry)
-          return true;
-
-        bool eatingAndNotFull = (lf.Eating && lf.Hunger < lf.Genetics.GetMaxHunger());
+    public IState<Lifeform> UpdateState(Lifeform lf)
+    { 
+        float hungerRate = lf.Genetics.GetHungerRate();
+        if(lf.Hunger + hungerRate >= lf.Genetics.GetMaxHunger())
+          return LifeformIdleState.Instance;
         
-        return eatingAndNotFull;
-    }
+        lf.DeltaAge();
+        lf.DeltaEnergy(-lf.Genetics.GetEnergyRate());
+        lf.DeltaHunger(hungerRate);
 
-    // Invoked every frame that the state is active in the state machine
-    public override void StateEffect(StateMachine<Lifeform> s)
-    {
-        Lifeform lf = s.GetStateComponent();
+        if(lf.IsDying())
+          return LifeformDeadState.Instance;
 
-        // TODO: Not sure if inventory driven, or location on map (stockpile / foraging?)
-        // Should probably do a timer here too...
-        lf.Eat(5.0f * Time.deltaTime);
-        lf.IncrementAge();
-        lf.DecrementEnergy();
+        return null;
     }
 }

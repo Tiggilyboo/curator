@@ -10,21 +10,9 @@ public class Lifeform : MonoBehaviour
 {
     private bool m_Initialized;
     private float m_TimeOfBirth;
-    private float m_TimeOfDeath;
     
     [SerializeField]
     private GameObject m_LifeformPrefab;
-
-    // TODO: I feel like these could be bitwise flagged in an enum?
-    //  Or, do we check the state machine state instead?
-    [SerializeField]
-    private bool m_Moving;
-    [SerializeField]
-    private bool m_Eating;
-    [SerializeField]
-    private bool m_Sleeping;
-    [SerializeField]
-    private bool m_Dead;
 
     [SerializeField]
     private float m_Hunger;
@@ -44,11 +32,6 @@ public class Lifeform : MonoBehaviour
     [SerializeField]
     private LifeformInterests m_Interests;
 
-    // Lifeform Stats
-    public bool Moving => m_Moving; 
-    public bool Eating => m_Eating;
-    public bool Sleeping => m_Sleeping;
-    public bool Dead => m_Dead;
     public float Hunger => m_Hunger;
     public float Age => m_Age;
     public float Energy => m_Energy;
@@ -59,57 +42,29 @@ public class Lifeform : MonoBehaviour
     public LifeformPerception Perception => m_Perception;
     public LifeformInterests Interests => m_Interests;
 
+    public GameObject GetPrefab() => m_LifeformPrefab;
+
     public float GetBirthTime() => m_TimeOfBirth;
     public float GetAliveTime() 
     {
-        if(Dead)
-          return m_TimeOfDeath - m_TimeOfBirth;
-        else
-          return Time.realtimeSinceStartup - m_TimeOfBirth;
+        return Time.realtimeSinceStartup - m_TimeOfBirth;
     }
 
-    public void Die()
+    public void DeltaAge()
     {
-        Stop();
-        m_Dead = true;
-        m_TimeOfDeath = Time.realtimeSinceStartup;
+        m_Age += Time.deltaTime;
+    }
 
-        // Super smelly pile.
-        // TODO: Stijn, how do I ensure the OnTriggerExit is called for destroyed objects?
-        Rigidbody rb = GetComponent<Rigidbody>();
-        rb.detectCollisions = false;
-        rb.WakeUp();
-        GameObject.Destroy(gameObject, 0.1f);
+    public void DeltaHunger(float amount)
+    {
+        m_Hunger += amount;
+    }
+
+    public void DeltaEnergy(float amount)
+    {
+        m_Energy += amount;
     }
     
-    public void Eat(float increment) 
-    {
-        Stop();
-        m_Eating = true;
-        m_Hunger += increment;
-    }
-
-    public void Sleep() 
-    {
-        Stop();
-        m_Sleeping = true;
-        m_Energy += Genetics.GetSleepRate();
-    }
-
-    public void Move()
-    {
-        m_Moving = true;
-        m_Eating = false;
-        m_Sleeping = false;
-    }
-
-    public void Stop()
-    {
-        m_Moving = false;
-        m_Eating = false;
-        m_Sleeping = false;
-    }
-
     public Lifeform Breed(Lifeform other)
     {
         GameObject childObj = Instantiate(m_LifeformPrefab);
@@ -120,24 +75,6 @@ public class Lifeform : MonoBehaviour
         child.Initialize(childGenes);
 
         return child;
-    }
-
-    public void IncrementAge()
-    {
-        m_Age += Time.deltaTime;
-    }
-
-    public void DecrementHunger()
-    {
-        m_Hunger -= Genetics.GetHungerRate();
-    }
-
-    public void DecrementEnergy()
-    {
-        if(Moving)
-          m_Energy -= Genetics.GetEnergyRate() * Genetics.GetMoveRate();
-        else
-          m_Energy -= Genetics.GetEnergyRate();
     }
 
     public void Initialize(LifeformGenetics genetics)
@@ -164,7 +101,6 @@ public class Lifeform : MonoBehaviour
         m_Age = 0;
 
         m_TimeOfBirth = Time.realtimeSinceStartup;
-        m_TimeOfDeath = 0;
         m_Initialized = true;
     }
 }

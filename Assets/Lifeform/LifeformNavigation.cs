@@ -39,6 +39,16 @@ public class LifeformNavigation: MonoBehaviour
         return m_NavAgent.isOnNavMesh || m_NavAgent.isOnOffMeshLink;
     }
 
+    public float GetInteractionDistance()
+    {
+        return m_NavAgent.radius * 2.0f;
+    }
+
+    public bool HasReachedDestination()
+    {
+        return HasPath() && GetDistanceRemaining() <= GetInteractionDistance();
+    }
+
     public void OnDrawGizmos()
     {
         if(HasPath()) 
