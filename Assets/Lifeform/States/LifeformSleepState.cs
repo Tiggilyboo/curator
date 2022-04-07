@@ -8,7 +8,11 @@ public class LifeformSleepState: IState<Lifeform>
     public string Identifier => "Sleeping";
 
     public void OnExit(Lifeform lf){}
-    public void OnEntry(Lifeform lf){}
+    public void OnEntry(Lifeform lf)
+    {
+        lf.Navigation.ResetPath();
+        lf.Navigation.Stop();
+    }
 
     public IState<Lifeform> UpdateState(Lifeform lf)
     {

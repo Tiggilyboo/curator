@@ -9,23 +9,23 @@ public class LifeformNavigation: MonoBehaviour
     public NavMeshAgent GetNavMeshAgent() => m_NavAgent;
     public Vector3 GetPosition() => transform.position;
     public Vector3 GetDestination() => m_NavAgent.destination;
+    public Vector3 GetVelocity() => m_NavAgent.velocity;
     public float GetDistanceRemaining() => m_NavAgent.remainingDistance;
     public bool HasPath() => m_NavAgent.hasPath;
     public void LookAt(Vector3 point) => transform.LookAt(point);
 
     public void ResetPath() 
     {
-        if(!gameObject.activeSelf)
-            return;
-
         m_NavAgent.ResetPath();
+    }
+
+    public void Stop()
+    {
+        m_NavAgent.velocity = Vector3.zero;
     }
 
     public void SetDestination(Vector3 destination)
     {
-        if(!gameObject.activeSelf)
-            return;
-
         m_NavAgent.SetDestination(destination);
     }
    

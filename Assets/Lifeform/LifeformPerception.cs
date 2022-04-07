@@ -11,10 +11,12 @@ public class LifeformPerception : MonoBehaviour
 
     [SerializeField]
     private Lifeform m_Lifeform;
+    
+    [SerializeField]
+    private SphereCollider m_PerceptionCollider;
 
     private HashSet<int> m_ObjectInstances;
     private List<GameObject> m_ObjectsInPerception;
-    private SphereCollider m_Collider;
     private OnPerceptionChanged m_OnPerceptionChanged;
 
     public void Start() 
@@ -22,9 +24,8 @@ public class LifeformPerception : MonoBehaviour
         m_ObjectInstances = new HashSet<int>();
         m_ObjectsInPerception = new List<GameObject>();
 
-        m_Collider = gameObject.AddComponent<SphereCollider>();
-        m_Collider.radius = m_Lifeform.Genetics.GetEyesightDistance();
-        m_Collider.isTrigger = true;
+        m_PerceptionCollider.radius = m_Lifeform.Genetics.GetEyesightDistance();
+        m_PerceptionCollider.isTrigger = true;
     }
 
     void OnTriggerEnter(Collider other) 

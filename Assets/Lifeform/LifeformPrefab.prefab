@@ -111,6 +111,7 @@ GameObject:
   - component: {fileID: 2333127729736315813}
   - component: {fileID: 5353410243603229600}
   - component: {fileID: 5710455105944813929}
+  - component: {fileID: 5648268443331388226}
   m_Layer: 0
   m_Name: LifeformPrefab
   m_TagString: Player
@@ -167,10 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c05ee458c0525a74aa7c1922901ac213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Moving: 0
-  m_Eating: 0
-  m_Sleeping: 0
-  m_Dead: 0
+  m_LifeformPrefab: {fileID: 8225920362799986264}
   m_Hunger: 0
   m_Age: 0
   m_Energy: 0
@@ -179,7 +177,6 @@ MonoBehaviour:
   m_StateMachine: {fileID: 8051044740350784658}
   m_Perception: {fileID: 2333127729736315813}
   m_Interests: {fileID: 5353410243603229600}
-  m_LifeformPrefab: {fileID: 8225920362799986264}
 --- !u!114 &8051044740350784658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,7 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Component: {fileID: 7708749361307699726}
-  m_CurrentState: {fileID: 11400000, guid: 8c6c51d4c42717fbbbc31703aba1a98e, type: 2}
+  m_Active: 1
 --- !u!114 &2408598787443929080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,7 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Lifeform: {fileID: 7708749361307699726}
-  m_ObjectsInPerception: []
+  m_PerceptionCollider: {fileID: 5648268443331388226}
 --- !u!114 &5353410243603229600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,3 +248,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!135 &5648268443331388226
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8225920362799986264}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}

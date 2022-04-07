@@ -36,6 +36,8 @@ public class GeneticTrait: ICloneable
 
     private void CheckValid()
     {
+        if (m_Start < 0 || m_End < 0)
+            throw new InvalidOperationException("Start or End index out of bounds (< 0)");
         if (m_Start >= m_End)
             throw new InvalidOperationException("Start index > end index");
     }
@@ -46,6 +48,17 @@ public class GeneticTrait: ICloneable
         
         int size = Marshal.SizeOf<T>();
         IEnumerable<byte> geneSegment = genes.GetDataForTrait(this);
+
+        // Gene segment for trait is too small for the output type. 
+        // Return the bytes that exist and pad the rest
+        if(geneSegment.Count() < size) 
+        {
+            byte[] paddedSegment = new byte[size];
+            for(int i = 0; i < geneSegment.Count(); i++)
+              paddedSegment[i] = geneSegment.ElementAt(i);
+
+            return converter.Invoke(paddedSegment, 0);
+        }
 
         // Ensure that we have enough data to return the appropriate type.
         if (m_End - m_Start <= size)

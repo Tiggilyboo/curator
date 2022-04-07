@@ -6,26 +6,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public abstract class Genetics: MonoBehaviour
+[Serializable]
+public class Genetics: ICloneable
 {
     private byte[] m_Data;
-
-    [SerializeField]
-    private float m_CrossoverRate = 0.65f;
-    [SerializeField]
-    private float m_MutationRate = 0.01f;
-    [SerializeField]
-    private int m_GeneticDataSize = 32;
+    
     [SerializeField]
     private GeneticTrait[] m_Traits;
     [SerializeField]
     private Genetics[] m_Parents;
+
+    [SerializeField]
+    private int m_GeneticDataSize = 32;
+    [SerializeField]
+    private float m_CrossoverRate = 0.65f;
+    [SerializeField]
+    private float m_MutationRate = 0.01f;
     
     private static GeneticTraitType GetTraitType(int idx) 
     {
         return (GeneticTraitType)(idx % (int)GeneticTraitType.COUNT);
     }
     
+    public IEnumerable<byte> GetData() => m_Data;
+    public int GetDataSize() => m_Data.Length;
+    public int GetTraitCount() => m_Traits.Length;
+    public float GetCrossoverRate() => m_CrossoverRate;
+    public float GetMutationRate() => m_MutationRate;
+    public Genetics[] GetParents() => m_Parents;
+
     // Determine a crossover value between two values based on the genetics crossover ratio
     private int CrossValue(int parent1Size, int parent2Size) 
     {
@@ -54,7 +63,7 @@ public abstract class Genetics: MonoBehaviour
             m_Data[i] = otherGenes.GetData().ElementAt(i);
         }
 
-        // Swap traits contained within the 0..positionData
+        // Swap traits contained within the 0..position
         for(int i = 0; i < m_Traits.Length; i++) 
         {
             GeneticTrait swapTrait = otherGenes.GetTrait((GeneticTraitType)i);
@@ -71,14 +80,16 @@ public abstract class Genetics: MonoBehaviour
             {
                 end = position;
             }
+            // It certainly does not fit. The trait is still a member of the current genetics.
             else 
-                throw new InvalidOperationException("unable to set trait end index");
+              continue;
 
             m_Traits[i] = new GeneticTrait(swapTrait.Identifier, start, end);
         }
     }
     
-    public virtual void Initialize()
+    // Create a new randomly generated Genetics instance
+    public Genetics()
     {
         const int traitCount = (int)GeneticTraitType.COUNT;
 
@@ -101,16 +112,20 @@ public abstract class Genetics: MonoBehaviour
           m_Data[i] = (byte)Random.Range(0, 255);
     }
     
-    // Initialize the genetics from two parents
-    public void InitializeFromParents(Genetics parent1, Genetics parent2) 
+    // Create a new genetics instance from two parents
+    public Genetics(Genetics parent1, Genetics parent2) 
     {
         m_CrossoverRate = CrossRate(parent1.GetCrossoverRate(), parent2.GetCrossoverRate());
         int newSize = CrossValue(parent1.GetDataSize(), parent2.GetDataSize());
         int newTSize = CrossValue(parent1.GetTraitCount(), parent2.GetTraitCount());
 
+        m_GeneticDataSize = newSize;
         m_Data = new byte[newSize];
         m_Traits = new GeneticTrait[newTSize];
-        m_Parents = new Genetics[] { parent1, parent2 };
+        m_Parents = new Genetics[] { 
+            parent1,
+            parent2
+        };
 
         // Crossover
         float crossAt = Random.value;
@@ -119,22 +134,28 @@ public abstract class Genetics: MonoBehaviour
             int crossDSize = (int)(newSize * crossAt);
             int crossTSize = (int)(newTSize * crossAt);
             
-            Genetics parent = crossAt > Random.value
-                ? parent2 
-                : parent1;
-
-            IEnumerable<byte> parentData = parent.GetData();
+            IEnumerable<byte> parentData = parent1.GetData();
             for(int i = 0; i < newSize; i++) 
             {
                 m_Data[i] = parentData.ElementAt(i);
             }
             for(int i = crossTSize; i < newTSize; i++) 
             {
-                GeneticTrait crossTrait = parent.GetTrait((GeneticTraitType)i);
+                GeneticTrait crossTrait = parent1.GetTrait((GeneticTraitType)i);
                 m_Traits[i] = (GeneticTrait)crossTrait.Clone();
             }
 
             SwapWith(parent2, crossDSize);
+        }
+        // Copy from parent1
+        else 
+        {
+            m_Data = parent1.GetData().ToArray();
+            for(int i = 0; i < newTSize; i++) 
+            {
+                GeneticTrait parentTrait = parent1.GetTrait((GeneticTraitType)i);
+                m_Traits[i] = (GeneticTrait)parentTrait.Clone();
+            }
         }
 
         // Mutate
@@ -184,10 +205,8 @@ public abstract class Genetics: MonoBehaviour
             .Take(t.Count());
     }
 
-    public IEnumerable<byte> GetData() => m_Data;
-    public int GetDataSize() => m_Data.Length;
-    public int GetTraitCount() => m_Traits.Length;
-    public float GetCrossoverRate() => m_CrossoverRate;
-    public float GetMutationRate() => m_MutationRate;
-    public Genetics[] GetParents() => m_Parents;
+    public object Clone()
+    {
+        return this.MemberwiseClone();
+    }
 }

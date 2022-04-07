@@ -8,7 +8,11 @@ public class LifeformEatState: IState<Lifeform>
     public string Identifier => "Eating";
 
     public void OnExit(Lifeform lf){}
-    public void OnEntry(Lifeform lf){}
+    public void OnEntry(Lifeform lf)
+    {
+        lf.Navigation.ResetPath();
+        lf.Navigation.Stop();
+    }
 
     public IState<Lifeform> UpdateState(Lifeform lf)
     { 

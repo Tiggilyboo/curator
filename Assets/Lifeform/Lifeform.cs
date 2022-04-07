@@ -67,11 +67,12 @@ public class Lifeform : MonoBehaviour
     
     public Lifeform Breed(Lifeform other)
     {
-        GameObject childObj = Instantiate(m_LifeformPrefab);
+        GameObject childObj = Instantiate(m_LifeformPrefab, transform.parent);
         childObj.name = "Lifeform";
 
         Lifeform child = childObj.GetComponent<Lifeform>();
         LifeformGenetics childGenes = child.Genetics;
+        childGenes.InitializeFromParents(this.Genetics, other.Genetics);
         child.Initialize(childGenes);
 
         return child;
@@ -87,7 +88,8 @@ public class Lifeform : MonoBehaviour
           throw new NullReferenceException("Unable to initialize without genetics being set");
 
         m_Genetics = genetics;
-        m_Genetics.Initialize();
+        if(!m_Genetics.Initialized)
+          m_Genetics.Initialize();
         
         float moveRate = m_Genetics.GetMoveRate();
         if(moveRate != float.NaN && moveRate > 0.0)

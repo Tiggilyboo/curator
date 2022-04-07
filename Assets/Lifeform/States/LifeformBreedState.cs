@@ -8,7 +8,11 @@ public class LifeformBreedState: IState<Lifeform>
     public string Identifier => "Breeding";
 
     public void OnExit(Lifeform lf){}
-    public void OnEntry(Lifeform lf){}
+    public void OnEntry(Lifeform lf)
+    {
+        lf.Navigation.ResetPath();
+        lf.Navigation.Stop();
+    }
 
     private Lifeform GetBreedingInterest(Lifeform lf)
     {
@@ -30,9 +34,13 @@ public class LifeformBreedState: IState<Lifeform>
         Lifeform other = GetBreedingInterest(lf);
         if(other != null) 
         {
+            other.Navigation.Stop();
+            other.Navigation.ResetPath();
+            other.DeltaEnergy(-other.Energy + 0.1f);
+
             lf.Breed(other);
             lf.Interests.RemoveAllWith(LifeformIntent.Breed);
-            lf.DeltaEnergy(-lf.Genetics.GetMaxEnergy() * 0.5f);
+            lf.DeltaEnergy(-lf.Energy + 0.1f);
         }
          
         return LifeformIdleState.Instance;

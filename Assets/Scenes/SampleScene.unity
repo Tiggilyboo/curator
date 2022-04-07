@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9530ff94aa95a1845903c074838acebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PoolSize: 64
+  m_PoolSize: 16
   m_PoolBatchSize: 8
   m_LifeformPrefab: {fileID: 8225920362799986264, guid: 33151ebcfc95355e0926611a8f7c783d, type: 3}
   m_BreedFittest: 0
