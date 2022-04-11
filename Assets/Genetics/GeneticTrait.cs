@@ -24,7 +24,6 @@ public class GeneticTrait: ICloneable
 {
     [SerializeField]
     private GeneticTraitType m_Type;
-
     private int m_Start;
     private int m_End;
     
