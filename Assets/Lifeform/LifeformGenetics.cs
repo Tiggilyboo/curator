@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Trait = GeneticTraitType;
 
@@ -40,7 +41,8 @@ public class LifeformGenetics: MonoBehaviour
     public float GetMoveRate() => m_MoveRate;
     public float GetBreedRate() => m_BreedRate;
     public float GetEyesightDistance() => m_Eyesight;
-    public Genetics GetGenetics() => m_Genetics;
+    private Genetics CloneUnderlying() => (Genetics)m_Genetics.Clone();
+    public IEnumerable<byte> GetData() => m_Genetics.GetData();
 
     private GeneticTrait GetTrait(Trait t) => m_Genetics.GetTrait(t);
 
@@ -83,8 +85,8 @@ public class LifeformGenetics: MonoBehaviour
           return;
 
         m_Genetics = new Genetics(
-            (Genetics)parent1.GetGenetics().Clone(), 
-            (Genetics)parent2.GetGenetics().Clone());
+            (Genetics)parent1.CloneUnderlying(), 
+            (Genetics)parent2.CloneUnderlying());
 
         InitializeFields();
     }
