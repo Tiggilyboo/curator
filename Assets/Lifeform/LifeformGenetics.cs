@@ -43,8 +43,8 @@ public class LifeformGenetics: MonoBehaviour
     public float GetEyesightDistance() => m_Eyesight;
     private Genetics CloneUnderlying() => (Genetics)m_Genetics.Clone();
     public IEnumerable<byte> GetData() => m_Genetics.GetData();
-
-    private GeneticTrait GetTrait(Trait t) => m_Genetics.GetTrait(t);
+    public int GetDataSize() => m_Genetics.GetDataSize();
+    public GeneticTrait GetTrait(Trait t) => m_Genetics.GetTrait(t);
 
     // Currently just consume the start byte and use u8 as the upperbound
     private float TraitToByteFloat(Trait t)

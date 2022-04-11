@@ -31,6 +31,57 @@ Transform:
   m_Father: {fileID: 6341172289964428212}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1190862010788985788
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5401078600126716610}
+  - component: {fileID: 2597853840683708371}
+  m_Layer: 5
+  m_Name: LifeformGeneticsUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5401078600126716610
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190862010788985788}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5760333241032900543}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -80}
+  m_SizeDelta: {x: 351, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2597853840683708371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190862010788985788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fcb1bc0ce328704b811e96009308e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Lifeform: {fileID: 7708749361307699726}
+  m_Canvas: {fileID: 8263139396660740038}
+  m_CanvasRectTransform: {fileID: 5401078600126716610}
 --- !u!1 &1798753133903089909
 GameObject:
   m_ObjectHideFlags: 0
@@ -61,7 +112,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5760333241032900543}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -140,12 +191,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5760333241032900543}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -1090, y: 200}
+  m_AnchoredPosition: {x: 0, y: 75}
+  m_SizeDelta: {x: -1090, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &624257707373877595
 CanvasRenderer:
@@ -299,6 +350,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
+  - {fileID: 5401078600126716610}
   - {fileID: 4627903489569769448}
   - {fileID: 4307127560239134083}
   - {fileID: 2105624789936795838}
@@ -384,6 +436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cbfe0ab357a6ce1d8d64802d0310377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_GeneticsUI: {fileID: 2597853840683708371}
   m_Lifeform: {fileID: 7708749361307699726}
   m_Canvas: {fileID: 8263139396660740038}
   m_TitleText: {fileID: 4167549627967263706}
@@ -514,7 +567,7 @@ RectTransform:
   m_LocalScale: {x: 0.25, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 5760333241032900543}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -591,7 +644,7 @@ RectTransform:
   m_Children:
   - {fileID: 7685085006827506442}
   m_Father: {fileID: 5760333241032900543}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -709,7 +762,7 @@ GameObject:
   - component: {fileID: 5353410243603229600}
   - component: {fileID: 5710455105944813929}
   - component: {fileID: 5648268443331388226}
-  - component: {fileID: 1669453989636476473}
+  - component: {fileID: 6531926675868194662}
   m_Layer: 0
   m_Name: LifeformPrefab
   m_TagString: Lifeform
@@ -860,7 +913,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1669453989636476473
+--- !u!114 &6531926675868194662
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

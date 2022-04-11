@@ -369,8 +369,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Focus: {fileID: 662053969}
   m_FocusRadius: 1
-  m_Zoom: 15
   m_FocusCentering: 0.5
+  m_Zoom: 15
+  m_ZoomSpeed: 10
   m_RotationSpeed: 90
 --- !u!20 &1450138495
 Camera:
@@ -520,6 +521,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 838373022543381515, guid: a949ee513c1b55a008c6377adc971da5, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1450138495}
     - target: {fileID: 992884760089785708, guid: a949ee513c1b55a008c6377adc971da5, type: 3}
       propertyPath: m_Name
       value: Curator

@@ -4,8 +4,11 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LifeformInspectorUI: MonoBehaviour
+public class LifeformInspectorUI: MonoBehaviour, IAmUIFor<Lifeform>
 {
+    [SerializeField]
+    private LifeformGeneticsUI m_GeneticsUI;
+
     [SerializeField]
     private Lifeform m_Lifeform;
     [SerializeField]
@@ -17,7 +20,9 @@ public class LifeformInspectorUI: MonoBehaviour
     [SerializeField]
     private Text m_BodyText;
 
-    public Lifeform Lifeform => m_Lifeform;
+    public Lifeform GetComponent() => m_Lifeform;
+    public Canvas GetCanvas() => m_Canvas;
+    public bool GetVisible() => m_Canvas.isActiveAndEnabled;
 
     private void UpdateCanvas()
     {
@@ -53,6 +58,7 @@ public class LifeformInspectorUI: MonoBehaviour
             UpdateCanvas();
         }
         m_Canvas.gameObject.SetActive(visible);
+        m_GeneticsUI.SetVisible(visible);
     }
 
     public void OnCloseButtonClick()

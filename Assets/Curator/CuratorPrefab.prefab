@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1095663983391956665}
   - component: {fileID: 353335028940596159}
   - component: {fileID: 4169376890457553292}
+  - component: {fileID: 838373022543381515}
   m_Layer: 0
   m_Name: CuratorPrefab
   m_TagString: Player
@@ -71,6 +72,21 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &838373022543381515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992884760089785708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0135c20f726a4ef18bea875052630c60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Player: {fileID: 992884760089785708}
+  m_NavAgent: {fileID: 353335028940596159}
+  m_Camera: {fileID: 0}
 --- !u!1 &4627052214953640863
 GameObject:
   m_ObjectHideFlags: 0
