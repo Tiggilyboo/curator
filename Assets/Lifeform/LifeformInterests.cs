@@ -19,19 +19,15 @@ public class LifeformInterest
     private LifeformIntent m_Intent;
     [SerializeField]
     private Lifeform m_Lifeform;
-    [SerializeField]
-    private float m_Dedication;
 
     public GameObject Object => m_Object;
     public LifeformIntent Intent => m_Intent;
     public Lifeform Lifeform => m_Lifeform;
-    public float Dedication => m_Dedication;
 
     public LifeformInterest(LifeformIntent intent, GameObject gameObject)
     {
         m_Object = gameObject;
         m_Intent = intent;
-        m_Dedication = 1.0f;
     }
 
     public LifeformInterest(LifeformIntent intent, Lifeform lifeform)

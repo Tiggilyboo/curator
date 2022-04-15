@@ -14,6 +14,8 @@ public class LifeformInspectorUI: MonoBehaviour, IAmUIFor<Lifeform>
     [SerializeField]
     private Canvas m_Canvas;
     [SerializeField]
+    private GraphicRaycaster m_Raycaster;
+    [SerializeField]
     private Text m_TitleText;
     [SerializeField]
     private Button m_CloseButton;
@@ -23,6 +25,9 @@ public class LifeformInspectorUI: MonoBehaviour, IAmUIFor<Lifeform>
     public Lifeform GetComponent() => m_Lifeform;
     public Canvas GetCanvas() => m_Canvas;
     public bool GetVisible() => m_Canvas.isActiveAndEnabled;
+    public GraphicRaycaster GetRaycaster() => m_Raycaster;
+
+    public event OnClose OnClose;
 
     private void UpdateCanvas()
     {
@@ -39,14 +44,10 @@ public class LifeformInspectorUI: MonoBehaviour, IAmUIFor<Lifeform>
 
         var sb = new StringBuilder();
 
+        sb.AppendLine(m_Lifeform.StateMachine.GetCurrentStateIdentifier());
         sb.Append(keyPair("Age", m_Lifeform.Age, m_Lifeform.Genetics.GetMaxAge()));
         sb.Append(keyPair("Energy", m_Lifeform.Energy, m_Lifeform.Genetics.GetMaxEnergy()));
         sb.Append(keyPair("Hunger", m_Lifeform.Hunger, m_Lifeform.Genetics.GetMaxHunger()));
-
-        sb.Append("Genetics: ");
-        foreach(byte gb in m_Lifeform.Genetics.GetData())
-          sb.Append(string.Format("{0} ", gb));
-        sb.Append("\n");
 
         return sb.ToString();
     }
@@ -64,10 +65,17 @@ public class LifeformInspectorUI: MonoBehaviour, IAmUIFor<Lifeform>
     public void OnCloseButtonClick()
     {
         SetVisible(false);
+        OnClose?.Invoke();
     }
 
     void Start()
     {
         SetVisible(false);
+    }
+
+    void Update()
+    {
+        if(GetVisible())
+          UpdateCanvas();
     }
 }

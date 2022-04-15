@@ -10,7 +10,7 @@ public class Lifeform : MonoBehaviour
 {
     private bool m_Initialized;
     private float m_TimeOfBirth;
-    
+
     [SerializeField]
     private GameObject m_LifeformPrefab;
 
@@ -45,7 +45,7 @@ public class Lifeform : MonoBehaviour
     public GameObject GetPrefab() => m_LifeformPrefab;
 
     public float GetBirthTime() => m_TimeOfBirth;
-    public float GetAliveTime() 
+    public float GetAliveTime()
     {
         return Time.realtimeSinceStartup - m_TimeOfBirth;
     }
@@ -64,7 +64,7 @@ public class Lifeform : MonoBehaviour
     {
         m_Energy += amount;
     }
-    
+
     public Lifeform Breed(Lifeform other)
     {
         GameObject childObj = Instantiate(m_LifeformPrefab, transform.parent);
@@ -80,23 +80,23 @@ public class Lifeform : MonoBehaviour
 
     public void Initialize(LifeformGenetics genetics)
     {
-        if(m_Initialized)
-          return;
+        if (m_Initialized)
+            return;
 
         // Ensure genetics are initialized before starting
-        if(genetics == null)
-          throw new NullReferenceException("Unable to initialize without genetics being set");
+        if (genetics == null)
+            throw new NullReferenceException("Unable to initialize without genetics being set");
 
         m_Genetics = genetics;
-        if(!m_Genetics.Initialized)
-          m_Genetics.Initialize();
-        
+        if (!m_Genetics.Initialized)
+            m_Genetics.Initialize();
+
         float moveRate = m_Genetics.GetMoveRate();
-        if(moveRate != float.NaN && moveRate > 0.0)
+        if (moveRate != float.NaN && moveRate > 0.0)
         {
             m_Navigation.SetMoveRate(m_Genetics.GetMoveRate());
         }
-        
+
         // Set to maximums / start values
         m_Hunger = m_Genetics.GetMaxHunger();
         m_Energy = m_Genetics.GetMaxEnergy();

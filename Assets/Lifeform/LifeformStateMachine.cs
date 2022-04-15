@@ -6,8 +6,7 @@ public class LifeformStateMachine: StateMachine<Lifeform>
     [SerializeField]
     private bool m_Active = true;
 
-    [SerializeField]
-    private string CurrentStateIdentifier => GetCurrentState().Identifier;
+    public string GetCurrentStateIdentifier() => GetCurrentState().Identifier;
 
     public void Stop()
     {

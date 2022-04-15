@@ -7,7 +7,8 @@ using UnityEngine;
 // Keep track of other game objects within the lifeform's eyesight distance
 public class LifeformPerception : MonoBehaviour
 {
-    public delegate void OnPerceptionChanged(Lifeform self, bool added, GameObject perceivedObject);
+    public delegate void OnPerceptionChangedDelegate(Lifeform self, bool added, GameObject perceivedObject);
+    public OnPerceptionChangedDelegate OnPerceptionChanged;
 
     [SerializeField]
     private Lifeform m_Lifeform;
@@ -17,7 +18,6 @@ public class LifeformPerception : MonoBehaviour
 
     private HashSet<int> m_ObjectInstances;
     private List<GameObject> m_ObjectsInPerception;
-    private OnPerceptionChanged m_OnPerceptionChanged;
 
     public void Start() 
     {
@@ -28,38 +28,28 @@ public class LifeformPerception : MonoBehaviour
         m_PerceptionCollider.isTrigger = true;
     }
 
-    void OnTriggerEnter(Collider other) 
+    void OnCollisionEnter(Collision other) 
     {
-        int id = other.gameObject.GetInstanceID();
+        int id = other.collider.gameObject.GetInstanceID();
         if(m_ObjectInstances.Contains(id))
           return;
 
         m_ObjectsInPerception.Add(other.gameObject);
         m_ObjectInstances.Add(id);
-        if(m_OnPerceptionChanged != null)
-          m_OnPerceptionChanged.Invoke(m_Lifeform, true, other.gameObject);
+        if(OnPerceptionChanged != null)
+          OnPerceptionChanged.Invoke(m_Lifeform, true, other.gameObject);
     }
 
-    void OnTriggerExit(Collider other) 
+    void OnCollisionExit(Collision other) 
     {
-        int id = other.gameObject.GetInstanceID();
+        int id = other.collider.gameObject.GetInstanceID();
         if(!m_ObjectInstances.Contains(id))
           return;
 
         m_ObjectsInPerception.Remove(other.gameObject);
         m_ObjectInstances.Remove(id);
-        if(m_OnPerceptionChanged != null)
-          m_OnPerceptionChanged.Invoke(m_Lifeform, false, other.gameObject);
-    }
-
-    void RegisterChangeHandler(OnPerceptionChanged handler)
-    {
-        m_OnPerceptionChanged += handler;
-    }
-
-    void UnregisterChangeHandler(OnPerceptionChanged handler)
-    {
-        m_OnPerceptionChanged -= handler;
+        if(OnPerceptionChanged != null)
+          OnPerceptionChanged.Invoke(m_Lifeform, false, other.gameObject);
     }
 
     public IEnumerable<GameObject> OrderByClosest() 

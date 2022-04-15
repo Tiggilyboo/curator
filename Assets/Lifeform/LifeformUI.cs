@@ -5,8 +5,10 @@ public class LifeformUI: MonoBehaviour
     [SerializeField]
     private LifeformInspectorUI m_InspectorUI;
 
-    public void OpenInspector() 
+    public LifeformInspectorUI OpenInspector() 
     {
         m_InspectorUI.SetVisible(true);
+
+        return m_InspectorUI;
     }
 }
