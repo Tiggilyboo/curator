@@ -21,13 +21,13 @@ public class PlayerController: MonoBehaviour
     private EventSystem m_EventSystem;
 
     [SerializeField]
-    private GraphicRaycaster m_GraphicRaycaster;
-  
-    [SerializeField]
     private float m_MaxRaycastDistance = 1000f;
 
     [SerializeField]
     private LayerMask m_RaycastMask;
+
+    [SerializeField]
+    private List<IAmUI> m_ActiveUI;
 
     private bool HandleTerrainClick(RaycastHit hit, GameObject terrainObj)
     {
@@ -41,9 +41,10 @@ public class PlayerController: MonoBehaviour
         LifeformUI ui = lifeformObj.GetComponent<LifeformUI>(); 
         LifeformInspectorUI lifeformInspectorUI = ui.OpenInspector();
         lifeformInspectorUI.OnClose += () => {
-            m_GraphicRaycaster = null;
+            Debug.Log("Closed UI");
+            m_ActiveUI.Remove(lifeformInspectorUI);
         };
-        m_GraphicRaycaster = lifeformInspectorUI.GetRaycaster();
+        m_ActiveUI.Add(lifeformInspectorUI);
 
         return true;
     }
@@ -66,20 +67,21 @@ public class PlayerController: MonoBehaviour
 
     void Start()
     {
+        m_ActiveUI = new List<IAmUI>();
+
         if(m_EventSystem == null)
           m_EventSystem = EventSystem.current;
     }
 
-    public bool CheckUIAtCursor()
+    public bool CheckUIAtCursor(IAmUI ui)
     {
-        if(m_GraphicRaycaster == null)
-          return false;
-
-        PointerEventData pointerData = new PointerEventData(m_EventSystem);
-        pointerData.position = Input.mousePosition;
-
         List<RaycastResult> raycastResults = new List<RaycastResult>();
-        m_GraphicRaycaster.Raycast(pointerData, raycastResults);
+        GraphicRaycaster raycaster = ui.GetRaycaster();
+        PointerEventData pointerData = new PointerEventData(m_EventSystem) 
+        {
+            position = Input.mousePosition,
+        };
+        raycaster.Raycast(pointerData, raycastResults);
 
         return raycastResults.Any();
     }
@@ -89,8 +91,9 @@ public class PlayerController: MonoBehaviour
         if(Input.GetMouseButtonDown(0))
         {
             // Handle events in the UI?
-            if(CheckUIAtCursor())
-              return;
+            foreach(IAmUI ui in m_ActiveUI)
+              if(CheckUIAtCursor(ui))
+                return;
 
             /// Proceed with phyics based raycast checks
             Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);

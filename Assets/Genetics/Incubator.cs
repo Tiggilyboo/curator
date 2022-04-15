@@ -30,9 +30,6 @@ public class Incubator: MonoBehaviour
     [SerializeField]
     private bool m_BreedFittest = true;
 
-    [SerializeField]
-    private PlayerController m_Curator;
-
     private RandomLifeFactoryDelegate m_RandomLifeFactory;
     private EvolutionFactoryDelegate m_EvolutionFactory;
 
