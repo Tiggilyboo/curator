@@ -11,7 +11,6 @@ public class LifeformSleepState: IState<Lifeform>
     public void OnEntry(Lifeform lf)
     {
         lf.Navigation.ResetPath();
-        lf.Navigation.Stop();
     }
 
     public IState<Lifeform> UpdateState(Lifeform lf)
@@ -20,6 +19,7 @@ public class LifeformSleepState: IState<Lifeform>
         if(lf.Energy + sleepRate >= lf.Genetics.GetMaxEnergy())
           return LifeformIdleState.Instance;
 
+        lf.Navigation.Stop();
         lf.DeltaAge();
         lf.DeltaHunger(-lf.Genetics.GetHungerRate());
         lf.DeltaEnergy(sleepRate);

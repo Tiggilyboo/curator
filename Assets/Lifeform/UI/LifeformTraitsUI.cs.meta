@@ -3,7 +3,14 @@ guid: b6a976c4fd11f81299ed04276b02cb3a
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - m_GeneticsUI: {instanceID: 0}
+  - m_TraitImage: {instanceID: 0}
+  - m_TraitImageSprite: {instanceID: 0}
+  - m_CanvasRectTransform: {instanceID: 0}
+  - m_TraitImageRect: {instanceID: 0}
+  - m_HoverUIPrefab: {instanceID: 0}
+  - m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

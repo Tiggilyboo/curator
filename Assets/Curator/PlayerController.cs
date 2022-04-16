@@ -75,8 +75,11 @@ public class PlayerController: MonoBehaviour
 
     public bool CheckUIAtCursor(IAmUI ui)
     {
-        List<RaycastResult> raycastResults = new List<RaycastResult>();
         GraphicRaycaster raycaster = ui.GetRaycaster();
+        if(raycaster == null)
+          return false;
+
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
         PointerEventData pointerData = new PointerEventData(m_EventSystem) 
         {
             position = Input.mousePosition,

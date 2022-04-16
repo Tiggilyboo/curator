@@ -6,29 +6,30 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
-public class LifeformTraitsUI: MonoBehaviour, IPointerEnterHandler
+public class LifeformTraitsUI: MonoBehaviour, IPointerExitHandler
 {
     private static Dictionary<GeneticTraitType, Color> m_TraitColours;
-
-    private const int traitCount = (int)GeneticTraitType.COUNT;
 
     [SerializeField]
     private LifeformGeneticsUI m_GeneticsUI;
     [SerializeField]
     private LifeformGenetics m_Genetics => m_GeneticsUI.GetComponent();
     [SerializeField]
-    private Image m_TraitImage;
-    [SerializeField]
-    private Sprite m_TraitImageSprite;
+    private LifeformTraitsImage m_TraitImage;
     [SerializeField]
     private RectTransform m_CanvasRectTransform;
-    [SerializeField]
-    private RectTransform m_TraitImageRect;
+
+    public LifeformTraitsImage GetLifeformTraitsImage() => m_TraitImage;
+
+    private int GetTraitCount()
+    {
+        return m_Genetics.GetTraitCount();
+    }
 
     private void InitializeTraitColours()
     {
         m_TraitColours = new Dictionary<GeneticTraitType, Color>();
-        for(int i = 0; i < traitCount; i++)
+        for(int i = 0; i < GetTraitCount(); i++)
         {
             GeneticTraitType traitType = (GeneticTraitType)i;
             Color colour = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
@@ -37,16 +38,25 @@ public class LifeformTraitsUI: MonoBehaviour, IPointerEnterHandler
         }
     }
 
-    private void CreateUI()
+    private int GetTraitUnitWidth()
     {
-        int widthSegment = (int)Mathf.Floor(m_CanvasRectTransform.sizeDelta.x / traitCount);
+        int widthSegment = (int)Mathf.Floor(m_CanvasRectTransform.sizeDelta.x / GetTraitCount());
+        return widthSegment;
+    }
+    
+    // TODO: Ideal to move to utilities / extensions somewhere
+    // This is simplified if it is JUST and overlay type, not rendered to a mesh / plane that is not the screen!
+
+    private void CreateTraitImageUI()
+    {
+        int widthSegment = GetTraitUnitWidth();
         int width = (int)Mathf.Floor(m_CanvasRectTransform.sizeDelta.x);
         int height = (int)Mathf.Floor(m_CanvasRectTransform.sizeDelta.y);
 
         Texture2D traitTex = new Texture2D(width, height);
 
         // TODO: Investigate use of SetPixels with mips
-        for(int i = 0; i < traitCount; i++) 
+        for(int i = 0; i < GetTraitCount(); i++) 
         {
             GeneticTrait trait = m_Genetics.GetTrait((GeneticTraitType)i);
             Color traitColour = m_TraitColours[trait.Identifier];
@@ -61,23 +71,21 @@ public class LifeformTraitsUI: MonoBehaviour, IPointerEnterHandler
         Rect spriteRect = new Rect(0, 0, traitTex.width, traitTex.height);
         Sprite sprite = Sprite.Create(traitTex, spriteRect, new Vector2(0.5f, 0.5f));
 
-        m_TraitImage.sprite = sprite;
-        m_TraitImageSprite = sprite;
+        m_TraitImage.Initialize(m_Genetics, sprite);
     }
-  
-    // TODO: Better way to check when we are hovering over a specific part of the image?
-    //  Other methods could be with multiple images? But then we might run into scaling issues.
-    public void OnPointerEnter(PointerEventData pointer)
+
+    private void CreateUI()
     {
-        GameObject currentObj = pointer.pointerCurrentRaycast.gameObject;
-        if(currentObj != gameObject)
-          return;
-
-        // We are hovering over this behaviour's gameObject
-        Debug.Log("Hovering over " + gameObject.name);
+        CreateTraitImageUI();
     }
 
-    void Start()
+    public void OnPointerExit(PointerEventData pointer)
+    {
+        if(!m_TraitImage.IsHovering)
+          m_TraitImage.CloseHover();
+    }
+
+    private void Start()
     {
         const int colourSeed = 49842019;
         Random.InitState(colourSeed);

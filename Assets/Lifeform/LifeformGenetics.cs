@@ -35,16 +35,18 @@ public class LifeformGenetics: MonoBehaviour
     public float GetMaxHunger() => m_MaxHunger;
     public float GetMaxAge() => m_MaxAge;
 
-    public float GetEnergyRate() => Time.deltaTime * m_EnergyRate;
-    public float GetHungerRate() => Time.deltaTime * m_HungerRate;
-    public float GetSleepRate() => Time.deltaTime * m_SleepRate;
+    public float GetEnergyRate() => m_EnergyRate;
+    public float GetHungerRate() => m_HungerRate;
+    public float GetSleepRate() => m_SleepRate;
     public float GetMoveRate() => m_MoveRate;
     public float GetBreedRate() => m_BreedRate;
     public float GetEyesightDistance() => m_Eyesight;
     private Genetics CloneUnderlying() => (Genetics)m_Genetics.Clone();
     public IEnumerable<byte> GetData() => m_Genetics.GetData();
+    public IEnumerable<byte> GetDataForTrait(GeneticTrait trait) => m_Genetics.GetDataForTrait(trait);
     public int GetDataSize() => m_Genetics.GetDataSize();
     public GeneticTrait GetTrait(Trait t) => m_Genetics.GetTrait(t);
+    public int GetTraitCount() => m_Genetics.GetTraitCount();
 
     // Currently just consume the start byte and use u8 as the upperbound
     private float TraitToByteFloat(Trait t)

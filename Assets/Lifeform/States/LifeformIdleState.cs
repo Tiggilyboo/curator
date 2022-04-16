@@ -75,6 +75,7 @@ public class LifeformIdleState: IState<Lifeform>
     //  Returns state to transition to, or null to remain in the current state
     public IState<Lifeform> UpdateState(Lifeform lf)
     {
+        lf.Navigation.Stop();
         lf.Delta();
         if(lf.IsDying())
           return LifeformDeadState.Instance;

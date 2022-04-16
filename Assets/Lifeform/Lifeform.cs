@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: This is a horrific mess. Split some of these things up
 [RequireComponent(typeof(Rigidbody))]
 public class Lifeform : MonoBehaviour
 {
@@ -55,14 +54,19 @@ public class Lifeform : MonoBehaviour
         m_Age += Time.deltaTime;
     }
 
-    public void DeltaHunger(float amount)
+    public void DeltaHunger(float rate)
     {
-        m_Hunger += amount;
+        m_Hunger += rate * Time.deltaTime;
     }
 
-    public void DeltaEnergy(float amount)
+    public void DeltaEnergy(float rate)
     {
-        m_Energy += amount;
+        m_Energy += rate * Time.deltaTime;
+    }
+
+    public void SetEnergy(float energy)
+    {
+        m_Energy = energy;
     }
 
     public Lifeform Breed(Lifeform other)

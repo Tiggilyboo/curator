@@ -32,13 +32,15 @@ public class LifeformBreedState: IState<Lifeform>
         {
             other.Navigation.Stop();
             other.Navigation.ResetPath();
-            other.DeltaEnergy(-other.Energy + 0.1f);
+            other.SetEnergy(0.1f);
 
-            lf.Navigation.ResetPath();
             lf.Navigation.Stop();
+            lf.Navigation.ResetPath();
             lf.Breed(other);
+            lf.SetEnergy(0.1f);
             lf.Interests.RemoveAllWith(LifeformIntent.Breed);
-            lf.DeltaEnergy(-lf.Energy + 0.1f);
+
+            return LifeformSleepState.Instance;
         }
          
         return LifeformIdleState.Instance;

@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public delegate void OnClose();
+public delegate void OnPointer(PointerEventData pointer);
 
 public interface IAmUIFor<TComponent>: IAmUI
   where TComponent: Component

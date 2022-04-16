@@ -11,7 +11,6 @@ public class LifeformEatState: IState<Lifeform>
     public void OnEntry(Lifeform lf)
     {
         lf.Navigation.ResetPath();
-        lf.Navigation.Stop();
     }
 
     public IState<Lifeform> UpdateState(Lifeform lf)
@@ -20,6 +19,7 @@ public class LifeformEatState: IState<Lifeform>
         if(lf.Hunger + hungerRate >= lf.Genetics.GetMaxHunger())
           return LifeformIdleState.Instance;
         
+        lf.Navigation.Stop();
         lf.DeltaAge();
         lf.DeltaEnergy(-lf.Genetics.GetEnergyRate());
         lf.DeltaHunger(hungerRate);
