@@ -33,7 +33,7 @@ public class LifeformInspectorUI: MonoBehaviour, IAmUIFor<Lifeform>, IPointerExi
 
     public Lifeform GetComponent() => m_Lifeform;
     public Canvas GetCanvas() => m_Canvas;
-    public bool GetVisible() => m_Panel.active && m_GeneticsUI.GetVisible(); 
+    public bool GetVisible() => m_Panel.activeSelf && m_GeneticsUI.GetVisible(); 
     public GraphicRaycaster GetRaycaster() => m_Raycaster;
 
     public event OnClose OnClose;

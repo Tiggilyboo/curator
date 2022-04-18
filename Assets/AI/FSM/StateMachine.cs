@@ -6,6 +6,9 @@ using UnityEngine;
 public abstract class StateMachine<TComponent>: MonoBehaviour
     where TComponent: Component
 {
+    public delegate void OnStateChangeDelegate(TComponent component, IState<TComponent> state);
+    public event OnStateChangeDelegate OnStateChange;
+
     private IState<TComponent> m_CurrentState;
 
     [SerializeField]
@@ -30,6 +33,7 @@ public abstract class StateMachine<TComponent>: MonoBehaviour
         m_CurrentState.OnExit(m_Component);
         m_CurrentState = newState;
         m_CurrentState.OnEntry(m_Component);
+        OnStateChange?.Invoke(m_Component, m_CurrentState);
     }
 
     public void Initialize(IState<TComponent> initialState)
