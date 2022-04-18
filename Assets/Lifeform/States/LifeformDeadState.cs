@@ -12,6 +12,7 @@ public class LifeformDeadState: IState<Lifeform>
 
     public IState<Lifeform> UpdateState(Lifeform lf)
     {
+        lf.Navigation.Stop();
         // Ensure we no longer process the state machine (we are destroying the lifeform!)
         lf.StateMachine.Stop();
 

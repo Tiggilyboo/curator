@@ -30,6 +30,8 @@ public class Lifeform : MonoBehaviour
     private LifeformPerception m_Perception;
     [SerializeField]
     private LifeformInterests m_Interests;
+    [SerializeField]
+    private LifeformUI m_UI;
 
     public float Hunger => m_Hunger;
     public float Age => m_Age;
@@ -40,6 +42,7 @@ public class Lifeform : MonoBehaviour
     public LifeformStateMachine StateMachine => m_StateMachine;
     public LifeformPerception Perception => m_Perception;
     public LifeformInterests Interests => m_Interests;
+    public LifeformUI UI => m_UI;
 
     public GameObject GetPrefab() => m_LifeformPrefab;
 

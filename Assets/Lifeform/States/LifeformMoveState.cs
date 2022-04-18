@@ -75,35 +75,9 @@ public class LifeformMoveState: IState<Lifeform>
         return null;
     }
 
-    // Wander: Random point within lieform's perception radius
-    private void Wander(Lifeform lf)
-    {
-        float eyesight = lf.Genetics.GetEyesightDistance();
-        float wanderDistance = Random.Range(0, eyesight);
-        if(wanderDistance < lf.Navigation.GetInteractionDistance())
-          return;
-
-        Vector2 randomCircle = Random.insideUnitCircle;
-        Vector3 randomPointInRadius = new Vector3(
-            randomCircle.x * wanderDistance,
-            0, // TODO: Raycast terrain?
-            randomCircle.y * wanderDistance);
-
-        Vector3 wanderPos = lf.Navigation.GetPosition() + randomPointInRadius;
-        lf.Navigation.LookAt(wanderPos);
-        lf.Navigation.SetDestination(wanderPos);
-    }
-
     public IState<Lifeform> UpdateState(Lifeform lf)
     { 
-        lf.DeltaAge();
-        lf.DeltaHunger(-lf.Genetics.GetHungerRate());
-
-        // Further incur penalty for velocity
-        Vector3 velocity = lf.Navigation.GetVelocity();
-        float moveRate = lf.Genetics.GetMoveRate();
-        lf.DeltaEnergy(-moveRate * velocity.sqrMagnitude * 0.001f);
-
+        lf.DeltaMove();
         if(lf.IsDying())
           return LifeformDeadState.Instance;
 
@@ -123,15 +97,8 @@ public class LifeformMoveState: IState<Lifeform>
         IState<Lifeform> pursueState = PursueInterests(lf);
         if(pursueState == null)
         {
-            if(!lf.Navigation.HasPath())
-              Wander(lf);
-
-            return null;
+            return LifeformIdleState.Instance;
         } 
-        else if(pursueState == LifeformMoveState.Instance)
-        {
-            return null;
-        }
         else
           return pursueState;
     }

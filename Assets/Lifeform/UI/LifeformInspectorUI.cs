@@ -1,11 +1,15 @@
 using System;
 using System.Text;
+using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class LifeformInspectorUI: MonoBehaviour, IAmUIFor<Lifeform>
+public class LifeformInspectorUI: MonoBehaviour, IAmUIFor<Lifeform>, IPointerExitHandler
 {
+    private List<Button> m_ParentButtons;
+    
     [SerializeField]
     private LifeformGeneticsUI m_GeneticsUI;
 
@@ -16,15 +20,20 @@ public class LifeformInspectorUI: MonoBehaviour, IAmUIFor<Lifeform>
     [SerializeField]
     private GraphicRaycaster m_Raycaster;
     [SerializeField]
+    private GameObject m_Panel;
+    [SerializeField]
     private Text m_TitleText;
     [SerializeField]
     private Button m_CloseButton;
     [SerializeField]
     private Text m_BodyText;
+    [SerializeField]
+    private Button m_ParentButtonPrefab;
+
 
     public Lifeform GetComponent() => m_Lifeform;
     public Canvas GetCanvas() => m_Canvas;
-    public bool GetVisible() => m_Canvas.isActiveAndEnabled;
+    public bool GetVisible() => m_Panel.active && m_GeneticsUI.GetVisible(); 
     public GraphicRaycaster GetRaycaster() => m_Raycaster;
 
     public event OnClose OnClose;
@@ -54,11 +63,11 @@ public class LifeformInspectorUI: MonoBehaviour, IAmUIFor<Lifeform>
 
     public void SetVisible(bool visible) 
     {
-        if(!m_Canvas.isActiveAndEnabled && visible)
+        if(!GetVisible() && visible)
         {
             UpdateCanvas();
         }
-        m_Canvas.gameObject.SetActive(visible);
+        m_Panel.SetActive(visible);
         m_GeneticsUI.SetVisible(visible);
     }
 
@@ -68,6 +77,25 @@ public class LifeformInspectorUI: MonoBehaviour, IAmUIFor<Lifeform>
         OnClose?.Invoke();
     }
 
+    public void OnPointerExit(PointerEventData pointer)
+    {
+        List<RaycastResult> rayResults = new List<RaycastResult>();
+        m_Raycaster.Raycast(pointer, rayResults);
+
+        foreach(RaycastResult r in rayResults)
+        {
+            if(r.gameObject == gameObject)
+              return;
+        }
+
+        HoverUI hover = m_GeneticsUI
+          .GetTraitsUI()
+          .GetLifeformTraitsImage()
+          .GetActiveHoverUI();
+
+        hover?.Close();
+    }
+    
     void Start()
     {
         SetVisible(false);
@@ -78,4 +106,5 @@ public class LifeformInspectorUI: MonoBehaviour, IAmUIFor<Lifeform>
         if(GetVisible())
           UpdateCanvas();
     }
+
 }

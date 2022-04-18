@@ -7,8 +7,6 @@ using UnityEngine.EventSystems;
 
 public class HoverUI: MonoBehaviour, IAmUI, IPointerEnterHandler, IPointerExitHandler
 {
-    private float m_OpenedAt;
-
     [SerializeField]
     private List<Text> m_TextElements;
 
@@ -21,13 +19,13 @@ public class HoverUI: MonoBehaviour, IAmUI, IPointerEnterHandler, IPointerExitHa
     [SerializeField]
     private VerticalLayoutGroup m_Layout;
     [SerializeField]
-    private bool m_KeepAlive;
-    [SerializeField]
-    private float m_HoverCloseDelayInSec = 2f;
+    private bool m_PointerHovering;
+    public bool IsPointerHovering => m_PointerHovering;
 
     public event OnClose OnClose;
     public event OnPointer OnMouseEnter;
     public event OnPointer OnMouseExit;
+
     public Canvas GetCanvas() => m_Canvas;
     public GraphicRaycaster GetRaycaster() => m_Raycaster;
     public bool GetVisible() => m_Canvas.isActiveAndEnabled;
@@ -40,8 +38,6 @@ public class HoverUI: MonoBehaviour, IAmUI, IPointerEnterHandler, IPointerExitHa
             OnClose.Invoke();
 
         m_Canvas.gameObject.SetActive(visible);
-        m_OpenedAt = Time.realtimeSinceStartup;
-        m_KeepAlive = true;
     }
 
     public void Initialise(IEnumerable<Text> textElements)
@@ -62,14 +58,13 @@ public class HoverUI: MonoBehaviour, IAmUI, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData pointer)
     {
-        // Keep the UI open
-        SetVisible(true);
-
+        m_PointerHovering = true;
         OnMouseEnter?.Invoke(pointer);
     }
     
     public void OnPointerExit(PointerEventData pointer)
     {
+        m_PointerHovering = false;
         OnMouseExit?.Invoke(pointer);
     }
 
@@ -77,16 +72,5 @@ public class HoverUI: MonoBehaviour, IAmUI, IPointerEnterHandler, IPointerExitHa
     {
         if(m_TextElements == null)
           m_TextElements = new List<Text>();
-    }
-
-    void Update()
-    {
-        if(!m_KeepAlive)
-        {
-            if(Time.realtimeSinceStartup < m_OpenedAt + m_HoverCloseDelayInSec)
-              return;
-
-            SetVisible(false);
-        }
     }
 }

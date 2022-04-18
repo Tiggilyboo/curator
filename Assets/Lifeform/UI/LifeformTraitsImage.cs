@@ -32,11 +32,20 @@ public class LifeformTraitsImage : MonoBehaviour, IPointerEnterHandler, IPointer
     [SerializeField]
     private bool m_PointerHovering;
 
+    public bool IsPointerHovering => m_PointerHovering;
+    public HoverUI GetActiveHoverUI() => m_Hover;
+
     public void Initialize(LifeformGenetics genetics, Sprite sprite)
     {
         m_Genetics = genetics;
         m_Sprite = sprite;
         m_Image.sprite = m_Sprite;
+    }
+
+    public void SetVisible(bool visible)
+    {
+        m_Image.enabled = visible;
+        m_Hover?.Close();
     }
 
     private void CreateHoverForTraitType(GeneticTraitType traitType, float x, float y)

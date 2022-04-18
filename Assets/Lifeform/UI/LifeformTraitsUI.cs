@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
-public class LifeformTraitsUI: MonoBehaviour, IPointerExitHandler
+public class LifeformTraitsUI: MonoBehaviour
 {
     private static Dictionary<GeneticTraitType, Color> m_TraitColours;
 
@@ -78,11 +78,10 @@ public class LifeformTraitsUI: MonoBehaviour, IPointerExitHandler
     {
         CreateTraitImageUI();
     }
-
-    public void OnPointerExit(PointerEventData pointer)
+    
+    public void SetVisible(bool visible)
     {
-        if(!m_TraitImage.IsHovering)
-          m_TraitImage.CloseHover();
+        m_TraitImage.SetVisible(visible);
     }
 
     private void Start()

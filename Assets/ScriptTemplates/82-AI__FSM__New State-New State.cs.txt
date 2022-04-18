@@ -11,20 +11,20 @@ public class #SCRIPTNAME#: IState<Lifeform>
     public string Identifier => "#SCRIPTNAME#";
 
     // Invoked when the state machine enters this state
-    public bool OnEntry(Lifeform lf)
+    public void OnEntry(Lifeform lf)
     {
         #NOTRIM#
     }
 
     // Invoked when the state machine exits this state
-    public bool OnExit(Lifeform lf)
+    public void OnExit(Lifeform lf)
     {
         #NOTRIM#
     }
 
     // Invoked every frame that the state is active in the state machine
     //    Returns null to remain in the current state, or the state to transition to.
-    public IState<Lifeform> StateUpdate(Lifeform lf)
+    public IState<Lifeform> UpdateState(Lifeform lf)
     {
         #NOTRIM#
     }
