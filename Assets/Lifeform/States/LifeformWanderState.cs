@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 public class LifeformWanderState: IState<Lifeform>
 {
     // When the distance * move rate * multiplier time has elapsed, we give up wandering
-    private const float WaitTimeToArriveMultiplier = 2f;
+    private const float WaitTimeToArriveMultiplier = 10f;
     private static LifeformWanderState m_Instance = new LifeformWanderState();
     public static LifeformWanderState Instance => m_Instance;
 
@@ -38,13 +38,7 @@ public class LifeformWanderState: IState<Lifeform>
             if(lf.Navigation.GetRemainingDistance() <= interactionDistance)
                 return LifeformIdleState.Instance;
 
-            // Check if the path is accessible
-            float timeLastSet = lf.Navigation.GetTimeDestinationLastSet();
-            float crowFliesArrival = lf.Navigation.GetRemainingDistance() * lf.Genetics.GetMoveRate() * Time.deltaTime;
-
-            // Give up!
-            if(Time.realtimeSinceStartup > timeLastSet + crowFliesArrival * WaitTimeToArriveMultiplier)
-              return LifeformIdleState.Instance;
+            // TODO: Give up if inaccessible
 
             // Continue wandering
             return null;

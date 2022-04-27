@@ -3,8 +3,9 @@ using UnityEngine.AI;
 
 public class LifeformNavigation: MonoBehaviour
 {
-    private float m_TimeDestinationSet;
-
+    // Multiplier * MoveRate = Speed
+    [SerializeField]
+    private float m_MoveSpeedMultiplier = 10f;
     [SerializeField]
     private NavMeshAgent m_NavAgent;
 
@@ -16,9 +17,9 @@ public class LifeformNavigation: MonoBehaviour
     public Vector3 GetDestination() => m_NavAgent.destination;
     public Vector3 GetVelocity() => m_NavAgent.velocity;
     public float GetRemainingDistance() => m_NavAgent.remainingDistance;
+    public float GetMoveSpeed() => m_NavAgent.speed;
     public bool HasPath() => m_NavAgent.hasPath;
     public void LookAt(Vector3 point) => transform.LookAt(point);
-    public float GetTimeDestinationLastSet() => m_TimeDestinationSet;
 
     public delegate void OnDestinationReachedDelegate(Lifeform lf);
     public event OnDestinationReachedDelegate OnDestinationReached;
@@ -36,12 +37,11 @@ public class LifeformNavigation: MonoBehaviour
     public void SetDestination(Vector3 destination)
     {
         m_NavAgent.SetDestination(destination);
-        m_TimeDestinationSet = Time.realtimeSinceStartup;
     }
    
     public void SetMoveRate(float moveRate)
     {
-        m_NavAgent.speed = moveRate;
+        m_NavAgent.speed = m_MoveSpeedMultiplier * moveRate;
     }
 
     public bool CanNavigate() 

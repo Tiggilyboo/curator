@@ -63,7 +63,7 @@ public class LifeformGenetics: MonoBehaviour
         m_MaxAge = Mathf.Abs(GetTrait(Trait.Age).AsInt(m_Genetics)) % (2 * 60 * 60);
         m_MaxEnergy = TraitToByteFloat(Trait.Energy) * 500;
         m_MaxHunger = TraitToByteFloat(Trait.Hunger) * 100;
-        m_MoveRate = TraitToByteFloat(Trait.Speed) * 10;
+        m_MoveRate = TraitToByteFloat(Trait.Speed);
         m_Eyesight = TraitToByteFloat(Trait.Eyesight) * 25;
         m_SleepRate = TraitToByteFloat(Trait.Energy);
         m_HungerRate = TraitToByteFloat(Trait.Hunger);
