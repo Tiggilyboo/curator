@@ -6,9 +6,12 @@ using Trait = GeneticTraitType;
 public class LifeformGenetics: MonoBehaviour
 {
     private bool m_Initialized;
+    public bool Initialized => m_Initialized;
 
     [SerializeField]
     private Genetics m_Genetics;
+    [SerializeField]
+    private GameObject m_LifeformBody;
 
     [SerializeField]
     private float m_MaxHunger;
@@ -29,8 +32,6 @@ public class LifeformGenetics: MonoBehaviour
     [SerializeField]
     private float m_Eyesight;
     
-    public bool Initialized => m_Initialized;
-    
     public float GetMaxEnergy() => m_MaxEnergy;
     public float GetMaxHunger() => m_MaxHunger;
     public float GetMaxAge() => m_MaxAge;
@@ -45,8 +46,8 @@ public class LifeformGenetics: MonoBehaviour
     public IEnumerable<byte> GetData() => m_Genetics.GetData();
     public IEnumerable<byte> GetDataForTrait(GeneticTrait trait) => m_Genetics.GetDataForTrait(trait);
     public int GetDataSize() => m_Genetics.GetDataSize();
-    public GeneticTrait GetTrait(Trait t) => m_Genetics.GetTrait(t);
     public int GetTraitCount() => m_Genetics.GetTraitCount();
+    public GeneticTrait GetTrait(Trait t) => m_Genetics.GetTrait(t);
 
     // Currently just consume the start byte and use u8 as the upperbound
     private float TraitToByteFloat(Trait t)
@@ -55,7 +56,6 @@ public class LifeformGenetics: MonoBehaviour
 
         return (float)gene / 255.0f;
     }
-
 
     // TODO: Too magical
     private void InitializeFields()
@@ -66,7 +66,7 @@ public class LifeformGenetics: MonoBehaviour
         m_MoveRate = TraitToByteFloat(Trait.Speed);
         m_Eyesight = TraitToByteFloat(Trait.Eyesight) * 25;
         m_SleepRate = TraitToByteFloat(Trait.Energy);
-        m_HungerRate = TraitToByteFloat(Trait.Hunger);
+        m_HungerRate = TraitToByteFloat(Trait.Energy); // 1f? Maybe need other factors
         m_EnergyRate = TraitToByteFloat(Trait.Energy);
         m_BreedRate = TraitToByteFloat(Trait.Breed);
         m_Initialized = true;

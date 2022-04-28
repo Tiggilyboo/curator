@@ -104,11 +104,12 @@ public class LifeformAnimation : MonoBehaviour
         float smooth = Mathf.Min(1.0f, Time.deltaTime / m_SmoothFactor);
         m_SmoothDeltaPos = Vector2.Lerp(m_SmoothDeltaPos, deltaPos, smooth);
 
-        if(Time.deltaTime > 1e-5f)
+        if(Time.deltaTime > 1e-5f) {
           m_Velocity = m_SmoothDeltaPos / Time.deltaTime;
+          m_Velocity.Normalize();
+        }
 
-        bool shouldMove = m_Velocity.magnitude > 0.5f 
-          && m_NavAgent.remainingDistance > m_NavAgent.radius;
+        bool shouldMove = m_NavAgent.remainingDistance > m_NavAgent.radius;
         
         m_Animator.SetBool(ParamIsMoving, shouldMove);
         m_Animator.SetFloat(ParamVelocityX, m_Velocity.x);

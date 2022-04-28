@@ -851,7 +851,7 @@ MonoBehaviour:
   m_NavAgent: {fileID: 6695098917521951232}
   m_Animator: {fileID: 8030166954612640900}
   m_Velocity: {x: 0, y: 0}
-  m_SmoothFactor: 0.1
+  m_SmoothFactor: 0.2
   m_Focus: {fileID: 5398244844568906304}
 --- !u!114 &5398244844568906304
 MonoBehaviour:
@@ -869,7 +869,7 @@ MonoBehaviour:
   m_LifeformHead: {fileID: 59081967061996024}
   m_LookAtCoolTime: 0.2
   m_LookAtHeatTime: 0.2
-  m_RotationSpeed: 6.28
+  m_RotationSpeed: 3
 --- !u!1 &5025102310167262747
 GameObject:
   m_ObjectHideFlags: 0
@@ -897,13 +897,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5025102310167262747}
-  m_LocalRotation: {x: 0.021283481, y: 0.043468114, z: -0.0009262386, w: 0.9988277}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 0.65, y: 0.65, z: 0.35}
   m_Children: []
   m_Father: {fileID: 136132549495246583}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 2.441, y: 4.984, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2366415718711589857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1591,7 +1591,7 @@ MonoBehaviour:
   m_StateMachine: {fileID: 8051044740350784658}
   m_Perception: {fileID: 2333127729736315813}
   m_Interests: {fileID: 5353410243603229600}
-  m_UI: {fileID: 0}
+  m_UI: {fileID: 6531926675868194662}
 --- !u!114 &8051044740350784658
 MonoBehaviour:
   m_ObjectHideFlags: 0

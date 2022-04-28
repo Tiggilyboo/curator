@@ -51,6 +51,8 @@ public class LifeformBreedState: IState<Lifeform>
 
     private bool TryBreed(Lifeform lf, Lifeform other)
     {
+        Debug.Log("TryBreed LifeformBreedState");
+
         if(!lf.BreedConditions() || other.BreedConditions())
         {
             lf.Interests.RemoveAllWith(LifeformIntent.Breed);

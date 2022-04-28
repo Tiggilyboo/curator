@@ -45,12 +45,8 @@ public class Lifeform : MonoBehaviour
     public LifeformUI UI => m_UI;
 
     public GameObject GetPrefab() => m_LifeformPrefab;
-
     public float GetBirthTime() => m_TimeOfBirth;
-    public float GetAliveTime()
-    {
-        return Time.realtimeSinceStartup - m_TimeOfBirth;
-    }
+    public float GetAliveTime() => Time.realtimeSinceStartup - m_TimeOfBirth;
 
     public void DeltaAge()
     {
