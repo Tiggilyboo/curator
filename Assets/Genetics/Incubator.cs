@@ -22,6 +22,9 @@ public class Incubator: MonoBehaviour
     [SerializeField]
     private int m_PoolBatchSize = 16;
 
+    [SerializeField]
+    private float m_SpawnRadius = 5f;
+
     // The lifeform prefab to use when spawning
     [SerializeField]
     private GameObject m_LifeformPrefab;
@@ -63,11 +66,12 @@ public class Incubator: MonoBehaviour
     private Lifeform DefaultRandomLifeFactory() 
     {
         GameObject lifeformObj = Instantiate(m_LifeformPrefab, transform.parent);
-        lifeformObj.name = "Lifeform";
+        lifeformObj.name = string.Format("Lifeform{0}", lifeformObj.GetHashCode());
         
         Vector3 offset = transform.position;
         Vector3 randomAround = Random.insideUnitCircle;
-        lifeformObj.transform.position = transform.position + new Vector3(randomAround.x, 0, randomAround.y) * 5.0f;
+        lifeformObj.transform.position = transform.position 
+          + new Vector3(randomAround.x, 2f, randomAround.y) * m_SpawnRadius;
 
         if(lifeformObj.GetComponent<LifeformStateMachine>() == null)
           throw new Exception();

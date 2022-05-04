@@ -8,6 +8,7 @@ public class LifeformSleepState: IState<Lifeform>
     public string Identifier => "Sleeping";
 
     private const float HungerHibernationRate = 0.25f;
+    private const float ReactToStarvationThreshold = 0.10f;
 
     public void OnExit(Lifeform lf){}
     public void OnEntry(Lifeform lf)
@@ -20,10 +21,14 @@ public class LifeformSleepState: IState<Lifeform>
         float sleepRate = lf.Genetics.GetSleepRate();
         if(lf.Energy + sleepRate >= lf.Genetics.GetMaxEnergy())
           return LifeformIdleState.Instance;
+        
+        float hungerRate = -lf.Genetics.GetHungerRate() * HungerHibernationRate;
+        if(lf.Hunger + hungerRate <= lf.Genetics.GetMaxHunger() * ReactToStarvationThreshold)
+          return LifeformIdleState.Instance;
 
         lf.Navigation.Stop();
         lf.DeltaAge();
-        lf.DeltaHunger(-lf.Genetics.GetHungerRate() * HungerHibernationRate);
+        lf.DeltaHunger(hungerRate);
         lf.DeltaEnergy(sleepRate);
 
         if(lf.IsDying())

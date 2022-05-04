@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.Animations;
 
-[RequireComponent(typeof(Animator))]
 public class LifeformFocus: MonoBehaviour
 {
     [SerializeField]
@@ -33,7 +32,7 @@ public class LifeformFocus: MonoBehaviour
         m_LookAt = m_LookAtTarget;
     }
 
-    private void OnAnimatorIK()
+    public void OnAnimatorIK(int layerIndex)
     {
         m_LookAtTarget.y = m_LifeformHead.position.y;
 

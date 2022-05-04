@@ -6,7 +6,6 @@ using UnityEngine.AI;
 using UnityEngine.Animations;
 
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(LifeformFocus))]
 public class LifeformAnimation : MonoBehaviour
 {
     private const string ParamIsMoving = "IsMoving";
@@ -54,12 +53,8 @@ public class LifeformAnimation : MonoBehaviour
         m_Animator.SetBool(ParamIsInteracting, isInteracting);
         m_Animator.SetBool(ParamIsSleeping, isSleeping);
 
-        // Reset the animation speed after modification via OnAnimationEvent
-        m_Animator.speed = 1f;
-
         // Reset the multiplier if it was zeroed from OnAnimationComplete
         SetMovementMultiplier(lf.Genetics.GetMoveRate());
-
     }
 
     private void SetMovementMultiplier(float multiplier)
@@ -69,7 +64,7 @@ public class LifeformAnimation : MonoBehaviour
 
     private void CreateAvatar()
     {
-        GameObject root = m_StateMachine.gameObject;
+        GameObject root = m_Animator.gameObject;
         Avatar a = AvatarBuilder.BuildGenericAvatar(root, ""); 
         a.name = "LifeformAvatar";
 
@@ -88,7 +83,7 @@ public class LifeformAnimation : MonoBehaviour
 
         // Don't update automatically, rely on this behaviour's movement from Update()
         m_NavAgent.updatePosition = false;
-        
+
         // Set the lifeform movement rate from genetics to the animatior
         Lifeform lf = GetLifeform();
         SetMovementMultiplier(lf.Genetics.GetMoveRate());
@@ -113,7 +108,7 @@ public class LifeformAnimation : MonoBehaviour
         if(Time.deltaTime > 1e-5f)
           m_Velocity = m_SmoothDeltaPos / Time.deltaTime;
 
-        bool shouldMove = m_Velocity.magnitude > 0.1f
+        bool shouldMove = m_Velocity.magnitude > 0.01f
           && m_NavAgent.remainingDistance > m_NavAgent.radius;
         
         m_Animator.SetBool(ParamIsMoving, shouldMove);
@@ -125,21 +120,10 @@ public class LifeformAnimation : MonoBehaviour
     private void OnAnimatorMove()
     {
         Lifeform lf = GetLifeform();
-        lf.gameObject.transform.position = m_NavAgent.nextPosition;
-    }
+        Transform lf_trans = lf.gameObject.transform;
+        lf_trans.position = m_NavAgent.nextPosition + m_Animator.deltaPosition;
+        lf_trans.forward = m_Animator.deltaRotation * lf_trans.forward;
 
-    public void OnAnimationEvent(string animationAction)
-    {
-      switch(animationAction)
-      {
-          case "Pause":
-            // Disable animation once we reach the end of the animation clip. 
-            // To be resumed on next state change.
-            m_Animator.speed = 0f;
-            break;
-
-          default:
-            throw new InvalidOperationException(string.Format("Unhandled animation action: {0}", animationAction));
-      }
+        m_Animator.speed = m_Velocity.magnitude * 0.75f;
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
-[RequireComponent(typeof(SkinnedMeshRenderer))]
+[RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
 public class LifeformModel: MonoBehaviour
 {
@@ -16,7 +16,7 @@ public class LifeformModel: MonoBehaviour
     [SerializeField]
     private MeshFilter m_MeshFilter;
     [SerializeField]
-    private SkinnedMeshRenderer m_MeshRenderer;
+    private MeshRenderer m_MeshRenderer;
     [SerializeField]
     private MeshCollider m_MeshCollider;
 
@@ -28,13 +28,9 @@ public class LifeformModel: MonoBehaviour
         if(m_MeshFilter == null)
           m_MeshFilter = GetComponent<MeshFilter>();
         if(m_MeshRenderer == null)
-        {
-            m_MeshRenderer = GetComponent<SkinnedMeshRenderer>();
-            m_MeshRenderer.rootBone = gameObject.transform;
-        }
+            m_MeshRenderer = GetComponent<MeshRenderer>();
 
         m_MeshFilter.sharedMesh = m_Mesh;
         m_MeshCollider.sharedMesh = m_Mesh;
-        m_MeshRenderer.sharedMesh = m_Mesh;
     }
 }

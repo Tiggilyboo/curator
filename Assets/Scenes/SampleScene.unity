@@ -250,6 +250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PoolSize: 32
   m_PoolBatchSize: 4
+  m_SpawnRadius: 10
   m_LifeformPrefab: {fileID: 8225920362799986264, guid: 33151ebcfc95355e0926611a8f7c783d, type: 3}
   m_BreedFittest: 0
 --- !u!23 &808634766
