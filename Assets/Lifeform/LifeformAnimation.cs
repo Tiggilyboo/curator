@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class LifeformAnimation : MonoBehaviour
     private const string ParamIsMoving = "IsMoving";
     private const string ParamIsDead = "IsDead";
     private const string ParamIsInteracting = "IsInteracting";
+    private const string ParamIsSleeping = "IsSleeping";
     private const string ParamMovementMultiplier = "MovementMultiplier";
     private const string ParamVelocityX = "VelocityX";
     private const string ParamVelocityY = "VelocityY";
@@ -35,26 +37,29 @@ public class LifeformAnimation : MonoBehaviour
 
     private void HandleStateChange(Lifeform lf, IState<Lifeform> state)
     {
-        bool isMoving = false;
         bool isInteracting = false;
         bool isDead = false;
+        bool isSleeping = false;
 
         if(state is LifeformDeadState)
           isDead = true;
         else if(state is LifeformSleepState)
-          isDead = true;
-        
-        if(state is LifeformMoveState)
-          isMoving = true;
-        else if(state is LifeformWanderState)
-          isMoving = true;
-        
-        if(state is LifeformEatState)
+          isSleeping = true;
+        else if(state is LifeformEatState)
+          isInteracting = true;
+        else if(state is LifeformBreedState)
           isInteracting = true;
 
         m_Animator.SetBool(ParamIsDead, isDead);
         m_Animator.SetBool(ParamIsInteracting, isInteracting);
-        m_Animator.SetBool(ParamIsMoving, isMoving);
+        m_Animator.SetBool(ParamIsSleeping, isSleeping);
+
+        // Reset the animation speed after modification via OnAnimationEvent
+        m_Animator.speed = 1f;
+
+        // Reset the multiplier if it was zeroed from OnAnimationComplete
+        SetMovementMultiplier(lf.Genetics.GetMoveRate());
+
     }
 
     private void SetMovementMultiplier(float multiplier)
@@ -88,6 +93,7 @@ public class LifeformAnimation : MonoBehaviour
         Lifeform lf = GetLifeform();
         SetMovementMultiplier(lf.Genetics.GetMoveRate());
 
+        // Bind state change callback
         m_StateMachine.OnStateChange += HandleStateChange;
     }
 
@@ -104,17 +110,15 @@ public class LifeformAnimation : MonoBehaviour
         float smooth = Mathf.Min(1.0f, Time.deltaTime / m_SmoothFactor);
         m_SmoothDeltaPos = Vector2.Lerp(m_SmoothDeltaPos, deltaPos, smooth);
 
-        if(Time.deltaTime > 1e-5f) {
+        if(Time.deltaTime > 1e-5f)
           m_Velocity = m_SmoothDeltaPos / Time.deltaTime;
-          m_Velocity.Normalize();
-        }
 
-        bool shouldMove = m_NavAgent.remainingDistance > m_NavAgent.radius;
+        bool shouldMove = m_Velocity.magnitude > 0.1f
+          && m_NavAgent.remainingDistance > m_NavAgent.radius;
         
         m_Animator.SetBool(ParamIsMoving, shouldMove);
         m_Animator.SetFloat(ParamVelocityX, m_Velocity.x);
         m_Animator.SetFloat(ParamVelocityY, m_Velocity.y);
-
         m_Focus.SetLookAtTarget(m_NavAgent.steeringTarget + lf_trans.forward);
     }
 
@@ -122,5 +126,20 @@ public class LifeformAnimation : MonoBehaviour
     {
         Lifeform lf = GetLifeform();
         lf.gameObject.transform.position = m_NavAgent.nextPosition;
+    }
+
+    public void OnAnimationEvent(string animationAction)
+    {
+      switch(animationAction)
+      {
+          case "Pause":
+            // Disable animation once we reach the end of the animation clip. 
+            // To be resumed on next state change.
+            m_Animator.speed = 0f;
+            break;
+
+          default:
+            throw new InvalidOperationException(string.Format("Unhandled animation action: {0}", animationAction));
+      }
     }
 }

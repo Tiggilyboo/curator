@@ -7,6 +7,8 @@ public class LifeformSleepState: IState<Lifeform>
 
     public string Identifier => "Sleeping";
 
+    private const float HungerHibernationRate = 0.25f;
+
     public void OnExit(Lifeform lf){}
     public void OnEntry(Lifeform lf)
     {
@@ -21,7 +23,7 @@ public class LifeformSleepState: IState<Lifeform>
 
         lf.Navigation.Stop();
         lf.DeltaAge();
-        lf.DeltaHunger(-lf.Genetics.GetHungerRate());
+        lf.DeltaHunger(-lf.Genetics.GetHungerRate() * HungerHibernationRate);
         lf.DeltaEnergy(sleepRate);
 
         if(lf.IsDying())
