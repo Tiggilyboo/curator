@@ -65,6 +65,12 @@ public class PlayerController: MonoBehaviour
         }
     }
 
+    private void HandleDestinationReached()
+    {
+        m_NavAgent.ResetPath();
+        m_NavAgent.velocity = Vector3.zero;
+    }
+
     void Start()
     {
         m_ActiveUI = new List<IAmUI>();
@@ -112,5 +118,9 @@ public class PlayerController: MonoBehaviour
             }
         }
 
+        if(m_NavAgent.hasPath && m_NavAgent.remainingDistance <= m_NavAgent.radius)
+        {
+            HandleDestinationReached();
+        }
     }
 }
