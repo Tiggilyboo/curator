@@ -8,6 +8,8 @@ using UnityEngine;
 public enum LifeformIntent
 {
     Breed,
+    FindFood,
+    BLEEP BLOOP KEEP WORKING FROM HERE!
 }
 
 [Serializable]

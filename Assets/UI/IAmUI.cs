@@ -6,7 +6,7 @@ public delegate void OnClose();
 public delegate void OnPointer(PointerEventData pointer);
 
 public interface IAmUIFor<TComponent>: IAmUI
-  where TComponent: Component
+  where TComponent: UnityEngine.Object
 {
     TComponent GetComponent();
 } 

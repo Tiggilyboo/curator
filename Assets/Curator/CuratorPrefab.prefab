@@ -29,6 +29,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7440006044635889486}
   m_Father: {fileID: 0}
@@ -93,9 +94,7 @@ MonoBehaviour:
   m_NavAgent: {fileID: 353335028940596159}
   m_Camera: {fileID: 0}
   m_EventSystem: {fileID: 0}
-  m_GraphicRaycaster: {fileID: 0}
   m_MaxRaycastDistance: 1000
-  m_CanMove: 1
   m_RaycastMask:
     serializedVersion: 2
     m_Bits: 9
@@ -112,7 +111,7 @@ GameObject:
   - component: {fileID: 3341323581869388562}
   - component: {fileID: 1487630866216420672}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -128,6 +127,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2406230500217915544}
   m_RootOrder: 0
@@ -151,6 +151,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1

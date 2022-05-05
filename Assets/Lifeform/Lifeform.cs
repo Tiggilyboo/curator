@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Lifeform : MonoBehaviour
+public class Lifeform : MonoBehaviour, IHaveResources
 {
     private bool m_Initialized;
     private float m_TimeOfBirth;
@@ -32,6 +32,8 @@ public class Lifeform : MonoBehaviour
     private LifeformInterests m_Interests;
     [SerializeField]
     private LifeformUI m_UI;
+    [SerializeField]
+    private LifeformInventory m_Inventory;
 
     public float Hunger => m_Hunger;
     public float Age => m_Age;
@@ -42,11 +44,13 @@ public class Lifeform : MonoBehaviour
     public LifeformStateMachine StateMachine => m_StateMachine;
     public LifeformPerception Perception => m_Perception;
     public LifeformInterests Interests => m_Interests;
+    public LifeformInventory Inventory => m_Inventory;
     public LifeformUI UI => m_UI;
 
     public GameObject GetPrefab() => m_LifeformPrefab;
     public float GetBirthTime() => m_TimeOfBirth;
     public float GetAliveTime() => Time.realtimeSinceStartup - m_TimeOfBirth;
+    public ResourceStorage GetResourceStorage() => m_Inventory.GetResourceStorage();
 
     public void DeltaAge()
     {

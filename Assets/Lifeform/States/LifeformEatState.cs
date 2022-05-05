@@ -10,9 +10,11 @@ public class LifeformEatState: IState<Lifeform>
     private const float ReactToEnergyThreshold = 0.05f;
 
     public void OnExit(Lifeform lf){}
-    public void OnEntry(Lifeform lf)
+    public void OnEntry(Lifeform lf){}
+
+    private bool AttemptToEat(Lifeform lf)
     {
-        lf.Navigation.ResetPath();
+        return lf.Inventory.TryToEat()
     }
 
     public IState<Lifeform> UpdateState(Lifeform lf)
@@ -24,7 +26,11 @@ public class LifeformEatState: IState<Lifeform>
         float energyRate = -lf.Genetics.GetEnergyRate();
         if(lf.Energy + energyRate <= lf.Genetics.GetMaxEnergy() * ReactToEnergyThreshold)
           return LifeformIdleState.Instance;
+
+        if(!AttemptToEat(lf))
+          return LifeformMoveState.Instance;
         
+        lf.Navigation.ResetPath();
         lf.Navigation.Stop();
         lf.DeltaAge();
         lf.DeltaEnergy(energyRate);

@@ -67,6 +67,11 @@
      <Compile Include="Assets/Lifeform/LifeformAnimation.cs" />
      <Compile Include="Assets/Lifeform/States/LifeformSleepState.cs" />
      <Compile Include="Assets/Lifeform/LifeformInterests.cs" />
+     <Compile Include="Assets/Curator/UI/PlayerHUD.cs" />
+     <Compile Include="Assets/UI/StatUI.cs" />
+     <Compile Include="Assets/Resources/Resource.cs" />
+     <Compile Include="Assets/Resources/ResourceStorage.cs" />
+     <Compile Include="Assets/Lifeform/LifeformInventory.cs" />
      <None Include="Assets/ScriptTemplates/82-AI__FSM__New State-New State.cs.txt" />
     <Reference Include="UnityEngine">
         <HintPath>/media/simon/Samsung_T5/Unity/2021.3.1f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
