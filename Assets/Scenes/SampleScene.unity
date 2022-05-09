@@ -230,6 +230,7 @@ GameObject:
   - component: {fileID: 808634766}
   - component: {fileID: 808634765}
   - component: {fileID: 808634769}
+  - component: {fileID: 808634770}
   m_Layer: 0
   m_Name: Incubator
   m_TagString: Untagged
@@ -336,6 +337,23 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &808634770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808634764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b524d48ba9090b4b4461566e64b037, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InitialResources:
+  - Resource: {fileID: 11400000, guid: a303b4be157ddd3c093295c02f685beb, type: 2}
+    Quantity: 100
+  - Resource: {fileID: 11400000, guid: 7d53fd7d3793b0642a35f4b572696dc0, type: 2}
+    Quantity: 100
 --- !u!1 &970898786
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,6 +545,7 @@ GameObject:
   - component: {fileID: 1791936416}
   - component: {fileID: 1791936415}
   - component: {fileID: 1791936414}
+  - component: {fileID: 1791936417}
   m_Layer: 3
   m_Name: Terrain
   m_TagString: Terrain
@@ -594,6 +613,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1791936417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791936413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a201551d7f228477a42eea4a2be3e2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ResourcePrefabs:
+  - m_Prefab: {fileID: 2118484859441155036, guid: c9e3293d7efb6145aa1a9906667fdc3e, type: 3}
+    m_Collider: {fileID: 4418859341567897875, guid: c9e3293d7efb6145aa1a9906667fdc3e, type: 3}
+    m_TreeProtoIndex: 0
+    m_IsTree: 1
+  m_Terrain: {fileID: 1791936415}
+  m_SecondsToSpawnAPrefab: 3
+  m_SecondsToCleanSpawnedObjects: 10
 --- !u!1 &1991929475
 GameObject:
   m_ObjectHideFlags: 0
@@ -647,7 +686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Canvas: {fileID: 1991929478}
-  m_Resources: {fileID: 2111404688}
+  m_PlayerResources: {fileID: 808634770}
   m_Layout: {fileID: 1991929479}
 --- !u!223 &1991929478
 Canvas:
@@ -709,21 +748,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 992884760089785708, guid: a949ee513c1b55a008c6377adc971da5, type: 3}
   m_PrefabInstance: {fileID: 2145990577}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2111404688
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2111404684}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 011674762478fda02af280ba8bb41e51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_InitialResources:
-  - {fileID: 11400000, guid: 7d53fd7d3793b0642a35f4b572696dc0, type: 2}
-  - {fileID: 11400000, guid: a303b4be157ddd3c093295c02f685beb, type: 2}
 --- !u!1001 &2145990577
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -3,15 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LifeformInventory : MonoBehaviour, IHaveResources
+public class LifeformInventory : ResourceStorage, IHaveResources
 {
     [SerializeField]
-    private ResourceStorage m_Storage;
-    public ResourceStorage GetResourceStorage() => m_Storage;
+    private Lifeform m_Lifeform;
+
+    [SerializeField]
+    public ResourceStorage GetResourceStorage() => this;
 
     public Resource GetFirstEdibleFromStorage()
     {
-        foreach(Resource r in m_Storage.AsEnumerable())
+        foreach(Resource r in base.AsEnumerable())
         {
             if(!r.IsEdible)
               continue;
@@ -28,7 +30,8 @@ public class LifeformInventory : MonoBehaviour, IHaveResources
         if(edible == null)
           return false;
 
-        edible.Quantity--;
+        edible.Interact(m_Lifeform);
+
         return true;
     }
 }

@@ -10,7 +10,7 @@ public interface IHaveResources
 }
 
 [Serializable]
-public sealed class InitialResourcePair
+public sealed class ResourceQuantityPair
 {
     public Resource Resource;
     public int Quantity;
@@ -26,22 +26,27 @@ public class ResourceStorage: MonoBehaviour
     private Dictionary<string, Resource> m_Resources;
 
     [SerializeField]
-    private List<InitialResourcePair> m_InitialResources;
+    private List<ResourceQuantityPair> m_InitialResources;
 
-    private void Start()
+    public void Initialise()
     {
-        if(m_Resources == null)
-            m_Resources = new Dictionary<string, Resource>();
-
         if(m_InitialResources != null)
         {
-            foreach(InitialResourcePair pair in m_InitialResources)
+            foreach(ResourceQuantityPair pair in m_InitialResources)
             {
                 Resource r = pair.Resource;
                 r.Quantity = pair.Quantity;
                 Add(r);
             }
         }
+    }
+
+    private void Start()
+    {
+        if(m_Resources == null)
+            m_Resources = new Dictionary<string, Resource>();
+
+        Initialise();
     }
 
     public void Add(Resource resource)
@@ -87,4 +92,14 @@ public class ResourceStorage: MonoBehaviour
     }
 
     public IEnumerable<Resource> AsEnumerable() => m_Resources.Values;
+
+    public void Clear()
+    {
+        for(int i = 0; i < m_Resources.Values.Count; i++)
+        {
+            Resource r = AsEnumerable().ElementAt(i);
+            OnResourceRemoved?.Invoke(r);
+            m_Resources.Remove(r.Identifier);
+        }
+    }
 }

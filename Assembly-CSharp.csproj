@@ -40,8 +40,10 @@
      <Compile Include="Assets/Lifeform/LifeformPerception.cs" />
      <Compile Include="Assets/Curator/PlayerController.cs" />
      <Compile Include="Assets/Genetics/GeneticTrait.cs" />
+     <Compile Include="Assets/UI/StatUI.cs" />
      <Compile Include="Assets/UI/HoverUI.cs" />
      <Compile Include="Assets/AI/FSM/StateMachine.cs" />
+     <Compile Include="Assets/Resources/Resource.cs" />
      <Compile Include="Assets/Lifeform/States/LifeformWanderState.cs" />
      <Compile Include="Assets/Lifeform/LifeformUI.cs" />
      <Compile Include="Assets/Lifeform/States/LifeformBreedState.cs" />
@@ -57,8 +59,12 @@
      <Compile Include="Assets/AI/FSM/IState.cs" />
      <Compile Include="Assets/Lifeform/LifeformNavigation.cs" />
      <Compile Include="Assets/Lifeform/States/LifeformIdleState.cs" />
+     <Compile Include="Assets/Curator/UI/PlayerHUD.cs" />
+     <Compile Include="Assets/Lifeform/LifeformInventory.cs" />
      <Compile Include="Assets/UI/IAmUI.cs" />
      <Compile Include="Assets/Lifeform/UI/LifeformInspectorUI.cs" />
+     <Compile Include="Assets/Lifeform/States/LifeformInteractState.cs" />
+     <Compile Include="Assets/Resources/ResourceStorage.cs" />
      <Compile Include="Assets/Lifeform/UI/LifeformTraitsImage.cs" />
      <Compile Include="Assets/Lifeform/LifeformFocus.cs" />
      <Compile Include="Assets/Lifeform/LifeformModel.cs" />
@@ -67,11 +73,9 @@
      <Compile Include="Assets/Lifeform/LifeformAnimation.cs" />
      <Compile Include="Assets/Lifeform/States/LifeformSleepState.cs" />
      <Compile Include="Assets/Lifeform/LifeformInterests.cs" />
-     <Compile Include="Assets/Curator/UI/PlayerHUD.cs" />
-     <Compile Include="Assets/UI/StatUI.cs" />
-     <Compile Include="Assets/Resources/Resource.cs" />
-     <Compile Include="Assets/Resources/ResourceStorage.cs" />
-     <Compile Include="Assets/Lifeform/LifeformInventory.cs" />
+     <Compile Include="Assets/AI/IInteractable.cs" />
+     <Compile Include="Assets/Resources/CollectibleResource.cs" />
+     <Compile Include="Assets/Resources/ResourceSpawner.cs" />
      <None Include="Assets/ScriptTemplates/82-AI__FSM__New State-New State.cs.txt" />
     <Reference Include="UnityEngine">
         <HintPath>/media/simon/Samsung_T5/Unity/2021.3.1f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

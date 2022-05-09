@@ -26,6 +26,8 @@ public class LifeformMoveState: IState<Lifeform>
         {
             case LifeformIntent.Breed:
               return LifeformBreedState.Instance;
+            case LifeformIntent.Interact:
+              return LifeformInteractState.Instance;
             default:
               throw new NotImplementedException();
         }
@@ -46,7 +48,6 @@ public class LifeformMoveState: IState<Lifeform>
         {
             LifeformInterest interest = interests.ElementAt(i);
             if(interest.Object == null) {
-                lf.Interests.Remove(interest);
                 continue;
             }
 
@@ -86,11 +87,11 @@ public class LifeformMoveState: IState<Lifeform>
         {
           if(lf.Navigation.HasReachedDestination())
           {
-            lf.Navigation.ResetPath();
-            return LifeformIdleState.Instance;
+              lf.Navigation.ResetPath();
+              return LifeformInteractState.Instance;
           }
           else
-            return null;
+              return null;
         } 
 
         // Do we have an interest to pursue?

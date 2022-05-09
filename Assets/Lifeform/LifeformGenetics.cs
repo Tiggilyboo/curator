@@ -10,8 +10,6 @@ public class LifeformGenetics: MonoBehaviour
 
     [SerializeField]
     private Genetics m_Genetics;
-    [SerializeField]
-    private GameObject m_LifeformBody;
 
     [SerializeField]
     private float m_MaxHunger;

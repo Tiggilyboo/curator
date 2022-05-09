@@ -14,30 +14,34 @@ public class LifeformEatState: IState<Lifeform>
 
     private bool AttemptToEat(Lifeform lf)
     {
-        return lf.Inventory.TryToEat()
+        return lf.Inventory.TryToEat();
     }
 
     public IState<Lifeform> UpdateState(Lifeform lf)
     { 
-        float hungerRate = lf.Genetics.GetHungerRate();
-        if(lf.Hunger + hungerRate >= lf.Genetics.GetMaxHunger())
-          return LifeformIdleState.Instance;
-
         float energyRate = -lf.Genetics.GetEnergyRate();
         if(lf.Energy + energyRate <= lf.Genetics.GetMaxEnergy() * ReactToEnergyThreshold)
           return LifeformIdleState.Instance;
 
-        if(!AttemptToEat(lf))
-          return LifeformMoveState.Instance;
-        
         lf.Navigation.ResetPath();
         lf.Navigation.Stop();
+
+        bool eaten = AttemptToEat(lf);
+        if(lf.Hunger >= lf.Genetics.GetMaxHunger())
+          return LifeformIdleState.Instance;
+        
+        if(!eaten)
+          lf.DeltaHunger(-lf.Genetics.GetHungerRate());
+
         lf.DeltaAge();
         lf.DeltaEnergy(energyRate);
-        lf.DeltaHunger(hungerRate);
 
         if(lf.IsDying())
           return LifeformDeadState.Instance;
+
+        // Find food
+        if(!eaten)
+            return LifeformWanderState.Instance;
 
         return null;
     }

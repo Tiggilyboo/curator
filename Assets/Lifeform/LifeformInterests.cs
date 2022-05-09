@@ -8,8 +8,7 @@ using UnityEngine;
 public enum LifeformIntent
 {
     Breed,
-    FindFood,
-    BLEEP BLOOP KEEP WORKING FROM HERE!
+    Interact,
 }
 
 [Serializable]
@@ -37,6 +36,9 @@ public class LifeformInterest
     {
         m_Lifeform = lifeform;
     }
+
+    public bool IsLifeform() => m_Lifeform != null;
+    public bool IsObject() => m_Object != null;
 }
 
 public class LifeformInterests: MonoBehaviour
