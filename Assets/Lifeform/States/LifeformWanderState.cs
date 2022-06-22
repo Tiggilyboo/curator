@@ -8,7 +8,6 @@ using Random = UnityEngine.Random;
 public class LifeformWanderState: IState<Lifeform>
 {
     // When the distance * move rate * multiplier time has elapsed, we give up wandering
-    private const float WaitTimeToArriveMultiplier = 10f;
     private static LifeformWanderState m_Instance = new LifeformWanderState();
     public static LifeformWanderState Instance => m_Instance;
 
@@ -37,11 +36,25 @@ public class LifeformWanderState: IState<Lifeform>
 
             if(lf.Navigation.GetRemainingDistance() <= interactionDistance)
                 return LifeformIdleState.Instance;
-
-            // TODO: Give up if inaccessible
+            
+            // TODO: Give up if inaccessible after period of time
 
             // Continue wandering
             return null;
+        } 
+        else 
+        {
+            // Anything interesting in our perception? This could be linked to curiosity trait?
+            foreach(GameObject perceivedObject in lf.Perception.OrderByClosest()) 
+            {
+                // TODO: Collect all tags somewhere
+                if(perceivedObject.tag == "Interactable") 
+                { 
+                    Debug.Log(string.Format("Now interested in %s", perceivedObject.name));
+                    lf.Interests.Add(LifeformIntent.Interact, perceivedObject);
+                    return LifeformInteractState.Instance;
+                }
+            }
         }
 
         // How far to wander?

@@ -64,7 +64,10 @@ public class ResourceSpawner : MonoBehaviour
         //  Or be more calculated when we get a collision, calculate a place around that collided bounds?
         for(int i = 0; i < 10; i++)
         {
+            float halfSize = terrainData.heightmapResolution * 0.5f;
             Vector2 randomPoint = Random.insideUnitCircle * terrainData.heightmapResolution;
+            randomPoint.x += halfSize;
+            randomPoint.y += halfSize;
             spawnLocation = new Vector3(randomPoint.x, 100f, randomPoint.y);
             spawnLocation += transform.position;
 

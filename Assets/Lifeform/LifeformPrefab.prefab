@@ -715,7 +715,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3836377995655043777
 GameObject:
@@ -1413,7 +1413,6 @@ GameObject:
   - component: {fileID: 7708749361307699726}
   - component: {fileID: 8051044740350784658}
   - component: {fileID: 2408598787443929080}
-  - component: {fileID: 2333127729736315813}
   - component: {fileID: 5353410243603229600}
   - component: {fileID: 6531926675868194662}
   - component: {fileID: 6695098917521951232}
@@ -1423,6 +1422,7 @@ GameObject:
   - component: {fileID: 6834399721661594196}
   - component: {fileID: 6770380663840641410}
   - component: {fileID: 4986720073723891071}
+  - component: {fileID: 470238456125261627}
   m_Layer: 0
   m_Name: LifeformPrefab
   m_TagString: Lifeform
@@ -1471,7 +1471,7 @@ MonoBehaviour:
   m_Genetics: {fileID: 0}
   m_Navigation: {fileID: 2408598787443929080}
   m_StateMachine: {fileID: 8051044740350784658}
-  m_Perception: {fileID: 2333127729736315813}
+  m_Perception: {fileID: 470238456125261627}
   m_Interests: {fileID: 5353410243603229600}
   m_UI: {fileID: 6531926675868194662}
   m_Inventory: {fileID: 4986720073723891071}
@@ -1504,20 +1504,6 @@ MonoBehaviour:
   m_MoveSpeedMultiplier: 5
   m_NavAgent: {fileID: 6695098917521951232}
   m_Lifeform: {fileID: 7708749361307699726}
---- !u!114 &2333127729736315813
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8225920362799986264}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7b386282f9987a4b9395378e3957813, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Lifeform: {fileID: 7708749361307699726}
-  m_PerceptionCollider: {fileID: 793005011954285624}
 --- !u!114 &5353410243603229600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1669,6 +1655,21 @@ MonoBehaviour:
   - Resource: {fileID: 11400000, guid: 7d53fd7d3793b0642a35f4b572696dc0, type: 2}
     Quantity: 10
   m_Lifeform: {fileID: 7708749361307699726}
+--- !u!114 &470238456125261627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8225920362799986264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7b386282f9987a4b9395378e3957813, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Lifeform: {fileID: 7708749361307699726}
+  m_PerceptionCollider: {fileID: 793005011954285624}
+  m_ObjectsInPerception: []
 --- !u!1 &8459463123819012336
 GameObject:
   m_ObjectHideFlags: 0

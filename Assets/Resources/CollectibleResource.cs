@@ -25,7 +25,7 @@ public class CollectibleResource: MonoBehaviour, IInteractable
         }
     }
     
-    public void Interact(Lifeform lf)
+    public bool Interact(Lifeform lf)
     {
         foreach(Resource r in m_Resources.AsEnumerable())
             lf.Inventory.Add(r);
@@ -34,6 +34,8 @@ public class CollectibleResource: MonoBehaviour, IInteractable
 
         if(m_DestroyOnDepletion)
             GameObject.Destroy(gameObject);
+
+        return true;
     }
 
     private void Update()

@@ -19,7 +19,7 @@ public class LifeformInteractState: IState<Lifeform>
         Vector3 lf_pos = lf.Navigation.GetPosition();
         float interactionDistance = lf.Navigation.GetInteractionDistance();
         
-        if(Vector3.Distance(lf_pos, t.position) < interactionDistance)
+        if(Vector3.Distance(lf_pos, t.position) <= interactionDistance)
           return true;
 
         return false;
@@ -29,6 +29,12 @@ public class LifeformInteractState: IState<Lifeform>
     {
         if(!CanLifeformInteractWith(lf, interest.Object.transform))
           return false;
+
+        if(interest.Intent != LifeformIntent.Interact) 
+          return false;
+
+        if(interest.Object.TryGetComponent<IInteractable>(out IInteractable interactable))
+          interactable.Interact(lf);
 
         return true;
     }

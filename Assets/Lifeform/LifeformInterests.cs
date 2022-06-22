@@ -38,24 +38,45 @@ public class LifeformInterest
     }
 
     public bool IsLifeform() => m_Lifeform != null;
-    public bool IsObject() => m_Object != null;
+    public bool IsObject() => m_Lifeform == null && m_Object != null;
 }
 
 public class LifeformInterests: MonoBehaviour
 {
+    private HashSet<int> m_InterestInstances;
+    private float m_NextTimeToCleanInSeconds;
+
     [SerializeField]
     private List<LifeformInterest> m_Interests;
 
     [SerializeField]
     private Lifeform m_Lifeform;
 
-    public IEnumerable<LifeformInterest> GetInterests() =>  m_Interests;
+    [SerializeField]
+    private float m_SecondsToClean = 10f;
 
+    public IEnumerable<LifeformInterest> GetInterests() =>  m_Interests;
     public bool Any() => m_Interests.Any();
+
+    private void Clean() 
+    {
+        for(int i = 0; i < m_Interests.Count; i++) 
+        {
+            if(m_Interests[i].Object == null)
+              m_Interests.RemoveAt(i);
+        }
+
+        m_NextTimeToCleanInSeconds = Time.realtimeSinceStartup + m_SecondsToClean;
+    }
 
     public void Add(LifeformIntent intent, Lifeform lifeform)
     {
         m_Interests.Add(new LifeformInterest(intent, lifeform));
+    }
+
+    public void Add(LifeformIntent intent, GameObject gameObject) 
+    {
+        m_Interests.Add(new LifeformInterest(intent, gameObject));
     }
 
     public void Remove(LifeformIntent intent, GameObject gameObject)
@@ -103,5 +124,15 @@ public class LifeformInterests: MonoBehaviour
     void Start()
     {
         m_Interests = new List<LifeformInterest>();
+        m_InterestInstances = new HashSet<int>();
+    }
+
+    void Update()
+    {
+        if(Time.realtimeSinceStartup > m_NextTimeToCleanInSeconds)
+        {
+            Clean();
+            return;
+        }
     }
 }

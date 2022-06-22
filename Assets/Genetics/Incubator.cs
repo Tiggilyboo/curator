@@ -69,9 +69,9 @@ public class Incubator: MonoBehaviour
         lifeformObj.name = string.Format("Lifeform{0}", lifeformObj.GetHashCode());
         
         Vector3 offset = transform.position;
-        Vector3 randomAround = Random.insideUnitCircle;
+        Vector3 randomAround = Random.insideUnitCircle * m_SpawnRadius;
         lifeformObj.transform.position = transform.position 
-          + new Vector3(randomAround.x, 2f, randomAround.y) * m_SpawnRadius;
+          + new Vector3(randomAround.x, 2f, randomAround.y);
 
         if(lifeformObj.GetComponent<LifeformStateMachine>() == null)
           throw new Exception();

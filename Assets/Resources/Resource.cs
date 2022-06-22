@@ -30,8 +30,14 @@ public class Resource: ScriptableObject, IInteractable
           m_Quantity = value; 
 
           if(m_Quantity > 0)
+          {
             TriggerChange();
-          else
+            return;
+          }
+  
+          if(m_Quantity < 0)
+            m_Quantity = 0;
+          if(m_Quantity == 0)
             OnResourceEmpty?.Invoke(this);
       }
     }
@@ -53,17 +59,16 @@ public class Resource: ScriptableObject, IInteractable
         }
     }
 
-    private void HandleEmpty()
-    {
-        OnResourceEmpty?.Invoke(this);
-    }
-
-    public void Interact(Lifeform lf)
+    public bool Interact(Lifeform lf)
     {
         if(!IsEdible)
           throw new NotImplementedException();
 
+        if(Quantity <= 0)
+          throw new InvalidOperationException();
+          
         ConsumeEdible(lf);
+        return true;
     }
 
     public void TriggerChange() 

@@ -1,5 +1,5 @@
 
 public interface IInteractable
 {
-    void Interact(Lifeform lf);
+    bool Interact(Lifeform lf);
 }

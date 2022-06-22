@@ -23,6 +23,7 @@ public class ResourceStorage: MonoBehaviour
     public event ResourceUpdateDelegate OnResourceRemoved;
     public event ResourceUpdateDelegate OnResourceAdded;
 
+    [SerializeField]
     private Dictionary<string, Resource> m_Resources;
 
     [SerializeField]
@@ -34,6 +35,9 @@ public class ResourceStorage: MonoBehaviour
         {
             foreach(ResourceQuantityPair pair in m_InitialResources)
             {
+                if(pair.Quantity <= 0)
+                  continue;
+
                 Resource r = pair.Resource;
                 r.Quantity = pair.Quantity;
                 Add(r);
@@ -60,8 +64,15 @@ public class ResourceStorage: MonoBehaviour
         {
             m_Resources.Add(resource.Identifier, resource);
             OnResourceAdded?.Invoke(resource);
+            resource.OnResourceEmpty += HandleResourceRemoved;
         }
+    }
 
+    private void HandleResourceRemoved(Resource r) 
+    {
+        m_Resources.Remove(r.Identifier);
+        OnResourceRemoved?.Invoke(r);
+        Debug.Log("Resource depleted");
     }
 
     public bool Has(Resource resource)
@@ -83,8 +94,7 @@ public class ResourceStorage: MonoBehaviour
             }
             else 
             {
-                m_Resources.Remove(resource.Identifier);
-                OnResourceRemoved?.Invoke(heldResource);
+                HandleResourceRemoved(heldResource);
             }
         }
         else
@@ -98,8 +108,7 @@ public class ResourceStorage: MonoBehaviour
         for(int i = 0; i < m_Resources.Values.Count; i++)
         {
             Resource r = AsEnumerable().ElementAt(i);
-            OnResourceRemoved?.Invoke(r);
-            m_Resources.Remove(r.Identifier);
+            HandleResourceRemoved(r);
         }
     }
 }

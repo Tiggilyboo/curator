@@ -41,7 +41,7 @@ public static class LifeformStateExtensions
 
     public static bool BreedConditions(this Lifeform lf)
     {
-        return lf.Age >= lf.Genetics.GetMaxAge() * 0.01f;
+        return lf.Age >= lf.Genetics.GetMaxAge() * 0.3f;
     }
     
     public static bool WanderConditions(this Lifeform lf)

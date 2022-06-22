@@ -30,8 +30,9 @@ public class LifeformInventory : ResourceStorage, IHaveResources
         if(edible == null)
           return false;
 
-        edible.Interact(m_Lifeform);
+        if(edible.Quantity == 0)
+          return false;
 
-        return true;
+        return edible.Interact(m_Lifeform);
     }
 }

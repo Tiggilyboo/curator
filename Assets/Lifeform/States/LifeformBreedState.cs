@@ -53,15 +53,15 @@ public class LifeformBreedState: IState<Lifeform>
     {
         Debug.Log("TryBreed LifeformBreedState");
 
-        if(!lf.BreedConditions() || other.BreedConditions())
+        if(!lf.BreedConditions() || !other.BreedConditions())
         {
             lf.Interests.RemoveAllWith(LifeformIntent.Breed);
             return false;
         }
 
         float chance = Random.value;
-        if(chance > lf.Genetics.GetBreedRate()
-            && chance > other.Genetics.GetBreedRate())
+        if(chance < lf.Genetics.GetBreedRate()
+            || chance < other.Genetics.GetBreedRate())
         {
             lf.Interests.RemoveAllWith(LifeformIntent.Breed);
             return false;

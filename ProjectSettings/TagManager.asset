@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Lifeform
   - Terrain
+  - Interactable
   layers:
   - Default
   - TransparentFX

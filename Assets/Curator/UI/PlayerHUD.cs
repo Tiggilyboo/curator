@@ -51,11 +51,15 @@ public class PlayerHUD: MonoBehaviour
     private void HandleResourceRemove(Resource oldResource)
     {
         StatUI ui = GetUIForResource(oldResource);
+        if(ui?.gameObject == null)
+          return;
+
         GameObject.Destroy(ui.gameObject);
     }
 
     private void Start()
     {
+        m_Elements = new Dictionary<string, StatUI>();
         m_PlayerResources.OnResourceAdded += HandleResourceAdd;
         m_PlayerResources.OnResourceRemoved += HandleResourceRemove;
         m_PlayerResources.OnResourceUpdated += HandleResourceUpdate;

@@ -75,7 +75,8 @@ public class Lifeform : MonoBehaviour, IHaveResources
     public Lifeform Breed(Lifeform other)
     {
         GameObject childObj = Instantiate(m_LifeformPrefab, transform.parent);
-        childObj.name = "Lifeform";
+        childObj.name = string.Format("Lifeform{0}", childObj.GetHashCode());
+        childObj.transform.position += Vector3.up;
 
         Lifeform child = childObj.GetComponent<Lifeform>();
         LifeformGenetics childGenes = child.Genetics;
